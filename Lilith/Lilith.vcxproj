@@ -113,11 +113,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="conversion.cpp" />
     <ClCompile Include="general.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="settings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="conversion.h" />
     <ClInclude Include="general.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="settings.h" />

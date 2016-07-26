@@ -1,9 +1,76 @@
 #include <Windows.h>
 #include <string>
+#include <tchar.h>
+#include <stdio.h>
 
 #include "general.h"
 
 using namespace std;
+
+bool regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName)
+{
+	DWORD dwType = 0;
+	long lResult = 0;
+	HKEY hKeyPlaceholder = NULL;
+
+	lResult = RegOpenKeyEx(hKey, keyPath, NULL, KEY_READ, &hKeyPlaceholder);
+	if (lResult == ERROR_SUCCESS)
+	{
+		lResult = RegQueryValueEx(hKeyPlaceholder, valueName, NULL, &dwType, NULL, NULL);
+
+		if (lResult == ERROR_SUCCESS)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
+bool setStartup(PCWSTR pszAppName, PCWSTR pathToExe, PCWSTR args)
+{
+	HKEY hKey = NULL;
+	LONG lResult = 0;
+	bool fSuccess;			//TEMP CHANGE, OLD: BOOL fSuccess = TRUE;
+	DWORD dwSize;
+
+	const size_t count = MAX_PATH * 2;
+	wchar_t szValue[count] = {};
+
+
+	wcscpy_s(szValue, count, L"\"");
+	wcscat_s(szValue, count, pathToExe);
+	wcscat_s(szValue, count, L"\" ");
+
+	if (args != NULL)
+	{
+		// caller should make sure "args" is quoted if any single argument has a space
+		// e.g. (L"-name \"Mark Voidale\"");
+		wcscat_s(szValue, count, args);
+	}
+
+	lResult = RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, NULL, 0, (KEY_WRITE | KEY_READ), NULL, &hKey, NULL);
+
+	fSuccess = (lResult == 0);
+
+	if (fSuccess)
+	{
+		dwSize = (wcslen(szValue) + 1) * 2;
+		lResult = RegSetValueExW(hKey, pszAppName, 0, REG_SZ, (BYTE*)szValue, dwSize);
+		fSuccess = (lResult == 0);
+	}
+
+	if (hKey != NULL)
+	{
+		RegCloseKey(hKey);
+		hKey = NULL;
+	}
+
+	return fSuccess;
+}
+
 
 bool directoryExists(const char* dirName)			//checks if directory exists
 {
@@ -23,7 +90,6 @@ void startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments)		//starts a pro
 	ZeroMemory(&si, sizeof(si));
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
-
 	// start the program up
 	CreateProcess(lpApplicationName,   // the path
 		lpArguments,        // Command line

