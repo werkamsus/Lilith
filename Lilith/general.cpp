@@ -7,6 +7,9 @@
 
 using namespace std;
 
+
+
+
 bool regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName)
 {
 	DWORD dwType = 0;

