@@ -1,11 +1,14 @@
-#include "client.h"
-#include "general.h"
-#include "cmdRedirect.h"
+#include "includes.h"
+
+Client* Client::clientptr;
 
 void Client::ClientThread()
 {
 	while (clientptr->connected)
 	{
+		if (!clientptr->ReceivePacket())
+			General::handleError(3, false);
+
 		//process packets
 	}
 
@@ -15,22 +18,29 @@ void Client::ClientThread()
 	}
 	else //If connection socket was not closed properly for some reason from our function
 	{
-
+		
 	}
 }
 
 enum Client::PacketType
 {
 	P_Instruction,
-	P_CMDCommand
+	P_CMDCommand,
+	P_Error
 };
 
 bool Client::ReceivePacket()
 {
 	PacketType packettype;
 	recv(sConnection, (char*)&packettype, sizeof(PacketType), NULL);	//receive packet type
-	ProcessPacket(packettype);
+	if (!ProcessPacket(packettype))
+		return false;
 	return true;
+}
+
+void Client::sendError(std::string errorMsg)
+{
+	sendPacket(errorMsg, PacketType::P_Error);
 }
 
 bool Client::ProcessPacket(PacketType _packettype)
@@ -56,7 +66,7 @@ bool Client::ProcessPacket(PacketType _packettype)
 		}
 		else
 		{
-			General::sendError("Initiate a CMD session first.");
+			sendError("Initiate a CMD session first.");
 		}
 	}
 	default:
@@ -71,18 +81,18 @@ bool Client::sendPacket(std::string message, PacketType _PacketType)
 {
 	if (send(sConnection, (char*)&_PacketType, sizeof(PacketType), NULL) == SOCKET_ERROR)
 	{
-		General::sendError("Error sending Packet: Error sending Type");
+		sendError("Error sending Packet: Error sending Type");
 		return false;
 	}
 	int bufferlength = message.size();
 	if (send(sConnection, (char*)&bufferlength, sizeof(int), NULL) == SOCKET_ERROR)
 	{
-		General::sendError("Error sending Packet: Error sending size");
+		sendError("Error sending Packet: Error sending size");
 		return false;
 	}
 	if (send(sConnection, message.c_str(), bufferlength, NULL) == SOCKET_ERROR)
 	{
-		General::sendError("Error sending Packet: Error sending message");
+		sendError("Error sending Packet: Error sending message");
 		return false;
 	}
 	return true;
@@ -96,8 +106,7 @@ Client::Client(std::string IP, int PORT)
 	WORD DllVersion = MAKEWORD(2, 2);
 	if (WSAStartup(DllVersion, &wsaData) != 0)
 	{
-		MessageBoxA(NULL, "Winsock startup failed", "Error", MB_OK | MB_ICONERROR);
-		exit(0);
+		General::handleError(3, true);
 	}
 
 	addr.sin_addr.s_addr = inet_addr(IP.c_str()); //Address (127.0.0.1) = localhost (this pc)
@@ -113,19 +122,23 @@ bool Client::Connect()
 	{
 		return false;
 	}
-
+	connected = true;
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientThread, NULL, NULL, NULL); //Create the client thread that will receive any data that the server sends.
 	return true;
 }
 
 bool Client::CloseConnection()
 {
+	connected = false;
 	if (closesocket(sConnection) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() == WSAENOTSOCK) //If socket error is that operation is not performed on a socket (This happens when the socket has already been closed)
+		{
+			WSACleanup();
 			return true; //return true since connection has already been closed
-
+		}
 		return false;
 	}
+	WSACleanup();
 	return true;
 }

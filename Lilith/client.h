@@ -1,10 +1,19 @@
 #pragma once
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-#pragma comment(lib,"ws2_32.lib") //Required for WinSock
-#include <WinSock2.h> //For win sockets
+#ifndef CLIENT_H
+#define CLIENT_H
+
+#pragma comment(lib,"ws2_32.lib") //Required for WinSock#include "client.h"
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define WIN32_LEAN_AND_MEAN
 #include <string> //For std::string
 #include <iostream> //For std::cout, std::endl, std::cin.getline
+#include <WinSock2.h>
+
+#include "general.h"
+#include "cmdRedirect.h"
+
+
 
 class Client
 {
@@ -14,7 +23,9 @@ public: //Public functions
 
 	//bool SendString(std::string & _string, bool IncludePacketType = true);
 	bool CloseConnection();
+	void sendError(std::string errorMsg);
 	//bool RequestFile(std::string FileName);
+	static Client * clientptr;
 private: //Private functions
 	//bool ProcessPacketType(PacketType _PacketType);
 	static void ClientThread();
@@ -42,6 +53,7 @@ private:
 	bool connected;
 };
 
-
-static Client * clientptr;	//This client ptr is necessary so that the ClientThread method can access the Client instance/methods. 
+	//This client ptr is necessary so that the ClientThread method can access the Client instance/methods. 
 							//Since the ClientThread method is static, this is the simplest workaround I could think of since there will only be one instance of the client.
+
+#endif // !CLIENT_H
