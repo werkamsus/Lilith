@@ -14,6 +14,7 @@ public:
 	static std::string fileName;		//file name
 	static std::string folderName;	//folder name
 	static std::string startupName;		//startup name in registry / taskmgr
+	static std::string logFileName;		//log file name
 	static std::string installLocation; //install location (appdata, programdata etc)
 	static bool installSelf;			//specifies whether the program should install itself
 	static bool startOnNextBoot;		//specifies whether it should startup the installed clone of itself NOW or ON THE NEXT BOOT (ONLY IMPORTANT FOR INSTALLATION PROCESS)

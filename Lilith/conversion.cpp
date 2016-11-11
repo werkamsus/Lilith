@@ -1,13 +1,13 @@
 #include "conversion.h"
 
-LPTSTR convStringToLPTSTR(std::string s)
+LPTSTR Conversion::convStringToLPTSTR(std::string s)
 {
 	//LOOK FOR WAY
 	LPSTR cString = _strdup(s.c_str());
 	return cString;
 }
 
-std::wstring convStringToWidestring(const std::string& s)
+std::wstring Conversion::convStringToWidestring(const std::string& s)
 {
 	int len;
 	int slength = (int)s.length() + 1;

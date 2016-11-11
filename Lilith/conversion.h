@@ -7,9 +7,11 @@
 #include <Windows.h>
 
 
-
-extern LPTSTR convStringToLPTSTR(std::string s);
-extern std::wstring convStringToWidestring(const std::string& s);
-
+class Conversion
+{
+public:
+	static LPTSTR convStringToLPTSTR(std::string s);
+	static std::wstring convStringToWidestring(const std::string& s);
+};
 
 #endif

