@@ -233,13 +233,13 @@ void General::handleError(int errType, bool errSevere)	//handles errors
 		switch (errType)
 		{
 		case 1:		//general error
-			Client::clientptr->sendError("General error");
+			Client::clientptr->SendString("General error");
 			return;
 		case 2:		//cmd error		
-			Client::clientptr->sendError("CMD error");
+			Client::clientptr->SendString("CMD error");
 			return;
 		case 3:		//networking error
-			Client::clientptr->sendError("Networking error");
+			Client::clientptr->SendString("Networking error");
 			return;
 		}
 		
@@ -277,20 +277,20 @@ void General::processCommand(std::string command)
 	}
 	else
 	{
-		Client::clientptr->sendError("Command '" + command + "' was not recognized.");
+		Client::clientptr->SendString("Command '" + command + "' was not recognized.");
 	}
 }
 
 void General::restartSelf()
 {
-	Client::clientptr->sendError("Restart requested: Restarting self");
+	Client::clientptr->SendString("Restart requested: Restarting self");
 	startProcess(currentPath.c_str(), NULL);
 	killSelf();
 }
 
 void General::killSelf()
 {
-	Client::clientptr->sendError("Termination requested: Killing self");
+	Client::clientptr->SendString("Termination requested: Killing self");
 	Client::clientptr->CloseConnection();
 	exit(0);
 }

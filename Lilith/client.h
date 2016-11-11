@@ -7,6 +7,8 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WinSock2.h>
 
+#include "FileTransferData.h"
+#include "PacketType.h"
 #include "general.h"
 #include "cmdRedirect.h"
 
@@ -21,31 +23,30 @@ class Client
 {
 public: //Public functions
 	Client(std::string IP, int PORT);
+	static Client * clientptr;
 	bool Connect();
 
-	//bool SendString(std::string & _string, bool IncludePacketType = true);
+	bool SendString(std::string _string, bool IncludePacketType = true);
 	bool CloseConnection();
-	//bool RequestFile(std::string FileName);
-	static Client * clientptr;
+	bool RequestFile(std::string FileName);
 private: //Private functions
-	//bool ProcessPacketType(PacketType _PacketType);
+	bool ProcessPacketType(PacketType _PacketType);
 	static void ClientThread();
-
-	static void ClientThread();
-private:
 	//Sending Funcs
-	bool SendInt(int _int);
-	bool SendPacketType(Packet _packettype);
+	bool sendall(char * data, int totalbytes);
+	bool Sendint32_t(int32_t _int32_t);
+	bool SendPacketType(PacketType _PacketType);
 
 
 	//Getting Funcs
-	bool GetInt(int & _int);
-	bool GetPacketType(Packet & _packettype);
+	bool recvall(char * data, int totalbytes);
+	bool Getint32_t(int32_t & _int32_t);
+	bool GetPacketType(PacketType & _PacketType);
 	bool GetString(std::string & _string);
 
 private:
-	//FileTransferData file; //Object that contains information about our file that is being received from the server.
-	SOCKET sConnection;//This client's connection to the server
+	FileTransferData file; //Object that contains information about our file that is being received from the server.
+	SOCKET Connection;//This client's connection to the server
 	SOCKADDR_IN addr; //Address to be binded to our Connection socket
 	static bool connected;
 };

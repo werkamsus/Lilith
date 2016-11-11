@@ -118,6 +118,8 @@
     <ClCompile Include="conversion.cpp" />
     <ClCompile Include="general.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="PacketManager.cpp" />
     <ClCompile Include="SendGetMethods.cpp" />
     <ClCompile Include="settings.cpp" />
   </ItemGroup>
@@ -125,8 +127,11 @@
     <ClInclude Include="client.h" />
     <ClInclude Include="cmdRedirect.h" />
     <ClInclude Include="conversion.h" />
+    <ClInclude Include="FileTransferData.h" />
     <ClInclude Include="general.h" />
-    <ClInclude Include="SendGetMethods.h" />
+    <ClInclude Include="Packet.h" />
+    <ClInclude Include="PacketManager.h" />
+    <ClInclude Include="PacketType.h" />
     <ClInclude Include="settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

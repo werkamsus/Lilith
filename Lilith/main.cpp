@@ -38,7 +38,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	while (true)
 	{
 		testMB("looping");
-		Client::clientptr->sendError("testErr");
+		MyClient.SendString("teststring");
 	}
 	//test stuff (WORKS \o/)
 

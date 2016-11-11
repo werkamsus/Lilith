@@ -78,10 +78,10 @@ void CMD::writeCMD(std::string command)		//write a string to stdIn of cmd.exe
 	{
 		command += '\n';	//apend '\n' to simulate "ENTER"
 		if (!WriteFile(g_hChildStd_IN_Wr, command.c_str(), command.size(), NULL, NULL))
-			Client::clientptr->sendError("Couldn't write command '" + command + "' to stdIn.");
+			Client::clientptr->SendString("Couldn't write command '" + command + "' to stdIn.");
 	}
 	else
-		Client::clientptr->sendError("Couldn't write to CMD: CMD not open");
+		Client::clientptr->SendString("Couldn't write to CMD: CMD not open");
 }
 
 void CMD::createChildProcess()	//creates child process ||copied from https://msdn.microsoft.com/en-us/library/windows/desktop/ms682499(v=vs.85).aspx ||

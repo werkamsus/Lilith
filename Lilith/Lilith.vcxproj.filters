@@ -48,6 +48,12 @@
     <ClCompile Include="SendGetMethods.cpp">
       <Filter>Source Files\client</Filter>
     </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Source Files\client</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketManager.cpp">
+      <Filter>Source Files\client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h">
@@ -65,7 +71,16 @@
     <ClInclude Include="client.h">
       <Filter>Header Files\client</Filter>
     </ClInclude>
-    <ClInclude Include="SendGetMethods.h">
+    <ClInclude Include="FileTransferData.h">
+      <Filter>Header Files\client</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Header Files\client</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketManager.h">
+      <Filter>Header Files\client</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketType.h">
       <Filter>Header Files\client</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,61 +1,90 @@
 #include "Client.h"
 
-bool Client::SendInt(int _int)
+bool Client::recvall(char * data, int totalbytes)
 {
-	int RetnCheck = send(Connection, (char*)&_int, sizeof(int), NULL); //send int: _int
-	if (RetnCheck == SOCKET_ERROR) //If int failed to send due to connection issue
-		return false; //Return false: Connection issue
+	int bytesreceived = 0; //Holds the total bytes received
+	while (bytesreceived < totalbytes) //While we still have more bytes to recv
+	{
+		int RetnCheck = recv(Connection, data + bytesreceived, totalbytes - bytesreceived, NULL); //Try to recv remaining bytes
+		if (RetnCheck == SOCKET_ERROR) //If there is a socket error while trying to recv bytes
+			return false; //Return false - failed to recvall
+		bytesreceived += RetnCheck; //Add to total bytes received
+	}
+	return true; //Success!
+}
+
+bool Client::sendall(char * data, int totalbytes)
+{
+	int bytessent = 0; //Holds the total bytes sent
+	while (bytessent < totalbytes) //While we still have more bytes to send
+	{
+		int RetnCheck = send(Connection, data + bytessent, totalbytes - bytessent, NULL); //Try to send remaining bytes
+		if (RetnCheck == SOCKET_ERROR) //If there is a socket error while trying to send bytes
+			return false; //Return false - failed to sendall
+		bytessent += RetnCheck; //Add to total bytes sent
+	}
+	return true; //Success!
+}
+bool Client::Sendint32_t(int32_t _int32_t)
+{
+	_int32_t = htonl(_int32_t); //Convert long from Host Byte Order to Network Byte Order
+	if (!sendall((char*)&_int32_t, sizeof(int32_t))) //Try to send int... If int fails to send
+		return false; //Return false: int not successfully sent
 	return true; //Return true: int successfully sent
 }
 
-bool Client::GetInt(int & _int)
+bool Client::Getint32_t(int32_t & _int32_t)
 {
-	int RetnCheck = recv(Connection, (char*)&_int, sizeof(int), NULL); //receive integer
-	if (RetnCheck == SOCKET_ERROR) //If there is a connection issue
-		return false; //return false since we did not get the integer
+	if (!recvall((char*)&_int32_t, sizeof(int32_t))) //Try to receive int... If int fails to be recv'd
+		return false; //Return false: Int not successfully received
+	_int32_t = ntohl(_int32_t); //Convert long from Network Byte Order to Host Byte Order
 	return true;//Return true if we were successful in retrieving the int
 }
 
-bool Client::SendPacketType(Packet _packettype)
+bool Client::SendPacketType(PacketType _PacketType)
 {
-	int RetnCheck = send(Connection, (char*)&_packettype, sizeof(Packet), NULL); //Send packet: _packettype
-	if (RetnCheck == SOCKET_ERROR) //If packettype failed to send due to connection issue
-		return false; //Return false: Connection issue
-	return true; //Return true: int successfully sent
+	if (!Sendint32_t((int32_t)_PacketType)) //Try to send PacketType type... If PacketType type fails to send
+		return false; //Return false: PacketType type not successfully sent
+	return true; //Return true: PacketType type successfully sent
 }
 
-bool Client::GetPacketType(Packet & _packettype)
+bool Client::GetPacketType(PacketType & _PacketType)
 {
-	int RetnCheck = recv(Connection, (char*)&_packettype, sizeof(Packet), NULL); //receive packet type (same as integer)
-	if (RetnCheck == SOCKET_ERROR) //If there is a connection issue
-		return false; //return false since we did not properly get the packet type
-	return true;//Return true if we were successful in retrieving the packet type
+	int packettype;
+	if (!Getint32_t(packettype))//Try to receive PacketType type... If PacketType type fails to be recv'd
+		return false; //Return false: PacketType type not successfully received
+	_PacketType = (PacketType)packettype;
+	return true;//Return true if we were successful in retrieving the PacketType type
 }
 
-bool Client::SendString(std::string & _string)
+bool Client::SendString(std::string _string, bool IncludePacketType)
 {
-	if (!SendPacketType(P_ChatMessage)) //Send packet type: Chat Message, If sending packet type fails...
-		return false; //Return false: Failed to send string
-	int bufferlength = _string.size(); //Find string buffer length
-	if (!SendInt(bufferlength)) //Send length of string buffer, If sending buffer length fails...
+	if (IncludePacketType)
+	{
+		if (!SendPacketType(PacketType::ChatMessage)) //Send PacketType type: Chat Message, If sending PacketType type fails...
+			return false; //Return false: Failed to send string
+	}
+	int32_t bufferlength = _string.size(); //Find string buffer length
+	if (!Sendint32_t(bufferlength)) //Send length of string buffer, If sending buffer length fails...
 		return false; //Return false: Failed to send string buffer length
-	int RetnCheck = send(Connection, _string.c_str(), bufferlength, NULL); //Send string buffer
-	if (RetnCheck == SOCKET_ERROR) //If failed to send string buffer
+	if (!sendall((char*)_string.c_str(), bufferlength)) //Try to send string buffer... If buffer fails to send,
 		return false; //Return false: Failed to send string buffer
 	return true; //Return true: string successfully sent
 }
 
 bool Client::GetString(std::string & _string)
 {
-	int bufferlength; //Holds length of the message
-	if (!GetInt(bufferlength)) //Get length of buffer and store it in variable: bufferlength
+	int32_t bufferlength; //Holds length of the message
+	if (!Getint32_t(bufferlength)) //Get length of buffer and store it in variable: bufferlength
 		return false; //If get int fails, return false
 	char * buffer = new char[bufferlength + 1]; //Allocate buffer
 	buffer[bufferlength] = '\0'; //Set last character of buffer to be a null terminator so we aren't printing memory that we shouldn't be looking at
-	int RetnCheck = recv(Connection, buffer, bufferlength, NULL); //receive message and store the message in buffer array, set RetnCheck to be the value recv returns to see if there is an issue with the connection
+	if (!recvall(buffer, bufferlength)) //receive message and store the message in buffer array. If buffer fails to be received...
+	{
+		delete[] buffer; //delete buffer to prevent memory leak
+		return false; //return false: Fails to receive string buffer
+	}
 	_string = buffer; //set string to received buffer message
 	delete[] buffer; //Deallocate buffer memory (cleanup to prevent memory leak)
-	if (RetnCheck == SOCKET_ERROR) //If connection is lost while getting message
-		return false; //If there is an issue with connection, return false
 	return true;//Return true if we were successful in retrieving the string
 }
