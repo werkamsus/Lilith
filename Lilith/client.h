@@ -25,29 +25,12 @@ public: //Public functions
 
 	//bool SendString(std::string & _string, bool IncludePacketType = true);
 	bool CloseConnection();
-	void sendError(std::string errorMsg);
 	//bool RequestFile(std::string FileName);
 	static Client * clientptr;
 private: //Private functions
 	//bool ProcessPacketType(PacketType _PacketType);
 	static void ClientThread();
 
-	bool ReceivePacket();
-	bool ProcessPacket(Packet _packettype);
-	bool sendPacket(std::string message, Packet _PacketType);
-	//Sending Funcs
-	//bool sendall(char * data, int totalbytes);
-	//bool Sendint32_t(int32_t _int32_t);
-	//bool SendPacketType(PacketType _PacketType);
-
-
-	//Getting Funcs
-	//bool recvall(char * data, int totalbytes);
-	//bool Getint32_t(int32_t & _int32_t);
-	//bool GetPacketType(PacketType & _PacketType);
-	//bool GetString(std::string & _string);
-
-	bool ProcessPacket(Packet _packettype);
 	static void ClientThread();
 private:
 	//Sending Funcs

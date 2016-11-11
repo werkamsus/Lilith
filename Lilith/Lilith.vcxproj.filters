@@ -19,6 +19,12 @@
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{7fe6aba7-2d39-4f59-86ae-61995f04c964}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\client">
+      <UniqueIdentifier>{8206b398-b0d1-42fa-ba14-4a9e06d50df7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\client">
+      <UniqueIdentifier>{1f245ddf-85f2-4142-a0da-3c9bc9221592}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,11 +39,14 @@
     <ClCompile Include="conversion.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="client.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cmdRedirect.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Source Files\client</Filter>
+    </ClCompile>
+    <ClCompile Include="SendGetMethods.cpp">
+      <Filter>Source Files\client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,11 +59,14 @@
     <ClInclude Include="conversion.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cmdRedirect.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>Header Files\client</Filter>
+    </ClInclude>
+    <ClInclude Include="SendGetMethods.h">
+      <Filter>Header Files\client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
