@@ -3,6 +3,14 @@
 Client* Client::clientptr;
 bool Client::connected = false;
 
+
+enum PacketType
+{
+	P_Instruction,
+	P_CMDCommand,
+	P_Error
+};
+
 void Client::ClientThread()
 {
 	while (clientptr->connected)
@@ -22,7 +30,7 @@ void Client::ClientThread()
 		
 	}
 }
-/*
+
 
 bool Client::ReceivePacket()
 {
@@ -119,7 +127,7 @@ errorMsg += " [NOT SENT TO SERVER]";
 General::log(errorMsg);
 }
 
-*/
+
 
 
 

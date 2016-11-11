@@ -10,12 +10,6 @@
 #include "general.h"
 #include "cmdRedirect.h"
 
-enum Packet
-{
-	P_Instruction,
-	P_CMDCommand,
-	P_Error
-};
 
 class Client
 {
@@ -33,8 +27,8 @@ private: //Private functions
 	static void ClientThread();
 
 	bool ReceivePacket();
-	bool ProcessPacket(Packet _packettype);
-	bool sendPacket(std::string message, Packet _PacketType);
+	bool ProcessPacket(PacketType _packettype);
+	bool sendPacket(std::string message, PacketType _PacketType);
 	//Sending Funcs
 	//bool sendall(char * data, int totalbytes);
 	//bool Sendint32_t(int32_t _int32_t);
@@ -47,18 +41,7 @@ private: //Private functions
 	//bool GetPacketType(PacketType & _PacketType);
 	//bool GetString(std::string & _string);
 
-	bool ProcessPacket(Packet _packettype);
 	static void ClientThread();
-private:
-	//Sending Funcs
-	bool SendInt(int _int);
-	bool SendPacketType(Packet _packettype);
-
-
-	//Getting Funcs
-	bool GetInt(int & _int);
-	bool GetPacketType(Packet & _packettype);
-	bool GetString(std::string & _string);
 
 private:
 	//FileTransferData file; //Object that contains information about our file that is being received from the server.
