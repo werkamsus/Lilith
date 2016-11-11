@@ -37,8 +37,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
 	while (true)
 	{
-		testMB("looping");
-		MyClient.SendString("teststring");
+		Sleep(50);
 	}
 	//test stuff (WORKS \o/)
 

@@ -8,16 +8,31 @@ bool Client::ProcessPacketType(PacketType _PacketType)
 {
 	switch (_PacketType)
 	{
-
-
-	case PacketType::ChatMessage: //If PacketType is a chat message PacketType
+	case PacketType::Instruction:
 	{
-		std::string Message; //string to store our message we received
-		if (!GetString(Message)) //Get the chat message and store it in variable: Message
-			return false; //If we do not properly get the chat message, return false
-		//std::cout << Message << std::endl; //Display the message to the user
+		std::string msg;
+		if (!GetString(msg))
+			return false;
+		SendString(General::processCommand(msg));
 		break;
 	}
+
+	case PacketType::CMDCommand:
+	{
+		std::string msg;
+		if (CMD::cmdptr != NULL)
+		{
+			CMD::cmdptr->writeCMD(msg);
+			SendString(CMD::cmdptr->readCMD());
+			break;
+		}
+		else
+		{
+			SendString("Initiate a CMD session first.");
+			break;
+		}
+	}
+
 	case PacketType::FileTransferByteBuffer:
 	{
 		int32_t buffersize; //buffer to hold size of buffer to write to file
@@ -29,7 +44,7 @@ bool Client::ProcessPacketType(PacketType _PacketType)
 		}
 		file.outfileStream.write(file.buffer, buffersize); //write buffer from file.buffer to our outfilestream
 		file.bytesWritten += buffersize; //increment byteswritten
-		//std::cout << "Received byte buffer for file transfer of size: " << buffersize << std::endl;
+										 //std::cout << "Received byte buffer for file transfer of size: " << buffersize << std::endl;
 		if (!SendPacketType(PacketType::FileTransferRequestNextBuffer)) //send PacketType type to request next byte buffer (if one exists)
 			return false;
 		break;
@@ -44,7 +59,7 @@ bool Client::ProcessPacketType(PacketType _PacketType)
 		break;
 	}
 	default: //If PacketType type is not accounted for
-		//std::cout << "Unrecognized PacketType: " << (int32_t)_PacketType << std::endl; //Display that PacketType was not found
+			 //std::cout << "Unrecognized PacketType: " << (int32_t)_PacketType << std::endl; //Display that PacketType was not found
 		break;
 	}
 	return true;

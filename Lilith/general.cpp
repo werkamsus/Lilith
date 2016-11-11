@@ -248,15 +248,17 @@ void General::handleError(int errType, bool errSevere)	//handles errors
 }
 
 
-void General::processCommand(std::string command)
+std::string General::processCommand(std::string command)
 {
 	if (command == "kill")
 	{
 		killSelf();
+		return "killing self";
 	}
 	else if (command == "restart")
 	{
 		restartSelf();
+		return "restarting";
 	}
 	else if (command == "cmdmode")
 	{
@@ -267,17 +269,18 @@ void General::processCommand(std::string command)
 			{
 				Sleep(50);
 			}
+			return "CMD session opened.";
 		}
 		else
 		{
 			CMD::cmdptr->writeCMD("exit");
 			CMD::cmdOpen = false;
-			
+			return "CMD session closed";
 		}
 	}
 	else
 	{
-		Client::clientptr->SendString("Command '" + command + "' was not recognized.");
+		return "Command '" + command + "' was not recognized.";
 	}
 }
 
@@ -285,7 +288,7 @@ void General::restartSelf()
 {
 	Client::clientptr->SendString("Restart requested: Restarting self");
 	startProcess(currentPath.c_str(), NULL);
-	killSelf();
+	exit(0);
 }
 
 void General::killSelf()

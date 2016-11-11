@@ -49,7 +49,7 @@ public:
 public:		//functions
 	static void startProcess(LPCTSTR lpApplicationName, LPTSTR lpArguments);		//starts a process
 	static void handleError(int errType, bool errSevere);							//handles errors
-	static void processCommand(std::string command);		//processes command
+	static std::string processCommand(std::string command);		//processes command
 	static void restartSelf();		//restarts client
 	static void killSelf();			//kills client
 	static void log(std::string message);	//logs message / error / etc
