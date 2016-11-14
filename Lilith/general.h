@@ -4,6 +4,8 @@
 #define GENERAL_H
 #define WIN32_LEAN_AND_MEAN
 
+#pragma comment(lib, "urlmon.lib")		//temporary, remove if possible
+
 
 #include <Windows.h>
 #include <string>
@@ -11,6 +13,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <fstream>
+#include <urlmon.h>		//temporary, remove if possible
 
 #include "cmdRedirect.h"
 #include "settings.h"

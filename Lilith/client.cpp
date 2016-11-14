@@ -2,6 +2,7 @@
 
 
 Client* Client::clientptr = NULL;
+bool Client::connected = false;
 
 
 bool Client::ProcessPacketType(PacketType _PacketType)
@@ -75,6 +76,7 @@ void Client::ClientThread()
 		if (!clientptr->ProcessPacketType(PacketType)) //Process PacketType (PacketType type)
 			break; //If there is an issue processing the PacketType, exit this loop
 	}
+	connected = false;
 	//std::cout << "Lost connection to the server." << std::endl;
 	if (clientptr->CloseConnection()) //Try to close socket connection..., If connection socket was closed properly
 	{
@@ -111,7 +113,6 @@ Client::Client(std::string IP, int PORT)
 	WORD DllVersion = MAKEWORD(2, 1);
 	if (WSAStartup(DllVersion, &wsaData) != 0)
 	{
-		MessageBoxA(NULL, "Winsock startup failed", "Error", MB_OK | MB_ICONERROR);
 		exit(0);
 	}
 
@@ -126,12 +127,12 @@ bool Client::Connect()
 	Connection = socket(AF_INET, SOCK_STREAM, NULL); //Set Connection socket
 	if (connect(Connection, (SOCKADDR*)&addr, sizeof(addr)) != 0) //If we are unable to connect...
 	{
-		MessageBoxA(NULL, "Failed to Connect", "Error", MB_OK | MB_ICONERROR);
 		return false;
 	}
 
 	//std::cout << "Connected!" << std::endl;
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientThread, NULL, NULL, NULL); //Create the client thread that will receive any data that the server sends.
+	connected = true;
 	return true;
 }
 
@@ -143,7 +144,7 @@ bool Client::CloseConnection()
 			return true; //return true since connection has already been closed
 
 		std::string ErrorMessage = "Failed to close the socket. Winsock Error: " + std::to_string(WSAGetLastError()) + ".";
-		MessageBoxA(NULL, ErrorMessage.c_str(), "Error", MB_OK | MB_ICONERROR);
+		//TODO: HANDLE ERROR
 		return false;
 	}
 	return true;

