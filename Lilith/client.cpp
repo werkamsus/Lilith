@@ -25,9 +25,7 @@ bool Client::ProcessPacketType(PacketType _PacketType)
 			return false;
 		if (CMD::cmdptr != NULL)
 		{
-			SendString("processing packet: '" + msg + "'", PacketType::Instruction);
-			CMD::cmdptr->writeCMD(msg);											//FIX BUG
-			SendString("processed packet", PacketType::Instruction);
+			CMD::cmdptr->writeCMD(msg);											//MOST ANNOYING BUG: [FIXED]
 			break;
 		}
 		else

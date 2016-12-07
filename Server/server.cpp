@@ -124,7 +124,9 @@ bool Server::ProcessPacket(int ID, PacketType _packettype)
 		if (!GetString(ID, message)) //Get the chat message and store it in variable: Message
 			return false; //If we do not properly get the chat message, return false
 						  //Next we need to send the message out to each user
-		General::outputMsg("ID [" + std::to_string(ID) + "]: " + message, 3);
+		
+		General::outputMsg(message, 3);
+		
 		break;
 	}
 

