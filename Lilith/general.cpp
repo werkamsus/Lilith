@@ -233,13 +233,13 @@ void General::handleError(int errType, bool errSevere)	//handles errors
 		switch (errType)
 		{
 		case 1:		//general error
-			Client::clientptr->SendString("General error");
+			Client::clientptr->SendString("General error", PacketType::Warning);
 			return;
 		case 2:		//cmd error		
-			Client::clientptr->SendString("CMD error");
+			Client::clientptr->SendString("CMD error", PacketType::Warning);
 			return;
 		case 3:		//networking error
-			Client::clientptr->SendString("Networking error");
+			Client::clientptr->SendString("Networking error", PacketType::Warning);
 			return;
 		}
 		
@@ -293,14 +293,14 @@ std::string General::processCommand(std::string command)
 
 void General::restartSelf()
 {
-	Client::clientptr->SendString("Restart requested: Restarting self");
+	Client::clientptr->SendString("Restart requested: Restarting self", PacketType::Warning);
 	startProcess(currentPath.c_str(), NULL);
 	exit(0);
 }
 
 void General::killSelf()
 {
-	Client::clientptr->SendString("Termination requested: Killing self");
+	Client::clientptr->SendString("Termination requested: Killing self", PacketType::Warning);
 	Client::clientptr->CloseConnection();
 	exit(0);
 }

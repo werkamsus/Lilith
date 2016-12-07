@@ -1,5 +1,7 @@
 #include "general.h"
 
+bool General::cmdMode = false;
+
 void General::outputMsg(std::string message, int msgType)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

@@ -26,7 +26,7 @@ public: //Public functions
 	static Client * clientptr;
 	bool Connect();
 
-	bool SendString(std::string _string, bool IncludePacketType = true);
+	bool SendString(std::string _string, PacketType _packettype);
 	bool CloseConnection();
 	bool RequestFile(std::string FileName);
 	static bool connected;

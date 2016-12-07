@@ -13,6 +13,8 @@ class General
 {
 public:
 	static void outputMsg(std::string message, int msgType);
+public:
+	static bool cmdMode;
 };
 
 
