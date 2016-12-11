@@ -2,7 +2,7 @@
 
 int main()
 {
-	Server MyServer(1111, false);
+	Server MyServer(1111, true);
 	MyServer.ListenForNewConnection();
 
 	MyServer.HandleInput();

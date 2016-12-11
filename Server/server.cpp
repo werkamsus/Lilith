@@ -290,6 +290,7 @@ void Server::ListenerThread()
 
 void Server::DisconnectClient(int ID) //Disconnects a client and cleans up socket if possible
 {
+	currentSessionID = -1;
 	std::lock_guard<std::mutex> lock(connectionMgr_mutex); //Lock connection manager mutex since we are possible removing element(s) from the vector
 	if (connections[ID]->ActiveConnection == false) //If connection has already been disconnected?
 	{

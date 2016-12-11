@@ -19,19 +19,22 @@
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{7fe6aba7-2d39-4f59-86ae-61995f04c964}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\client">
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{7785fa36-cd42-489f-9688-52d8ca0bbec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{a1d602ab-bc21-4c57-9442-ff3395d07883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Networking">
       <UniqueIdentifier>{8206b398-b0d1-42fa-ba14-4a9e06d50df7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\client">
+    <Filter Include="Header Files\Networking">
       <UniqueIdentifier>{1f245ddf-85f2-4142-a0da-3c9bc9221592}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="general.cpp">
-      <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="settings.cpp">
       <Filter>Source Files</Filter>
@@ -43,24 +46,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="client.cpp">
-      <Filter>Source Files\client</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
     <ClCompile Include="SendGetMethods.cpp">
-      <Filter>Source Files\client</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
     <ClCompile Include="Packet.cpp">
-      <Filter>Source Files\client</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
     <ClCompile Include="PacketManager.cpp">
-      <Filter>Source Files\client</Filter>
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="encryption.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="general.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="general.h">
-      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="conversion.h">
       <Filter>Header Files\Utility</Filter>
@@ -69,19 +75,25 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="client.h">
-      <Filter>Header Files\client</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="FileTransferData.h">
-      <Filter>Header Files\client</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="Packet.h">
-      <Filter>Header Files\client</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="PacketManager.h">
-      <Filter>Header Files\client</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="PacketType.h">
-      <Filter>Header Files\client</Filter>
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="encryption.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="general.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

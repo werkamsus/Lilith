@@ -19,57 +19,63 @@
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{04c7b403-9378-4c01-a49c-272276ae2ec2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Server">
+    <Filter Include="Header Files\Networking">
+      <UniqueIdentifier>{50262e7e-50b6-48c2-a6fc-da1695f07823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Networking">
       <UniqueIdentifier>{88120fc6-1a61-4431-aee6-a6bab2ef1157}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Server">
-      <UniqueIdentifier>{50262e7e-50b6-48c2-a6fc-da1695f07823}</UniqueIdentifier>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{b6383874-2701-4bf9-824b-d7f70b6dfba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{96500dc0-c7d1-4ccf-b550-ba0130bd3dd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="general.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="server.cpp">
-      <Filter>Source Files\Server</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
     <ClCompile Include="Packet.cpp">
-      <Filter>Source Files\Server</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
     <ClCompile Include="SendGetMethods.cpp">
-      <Filter>Source Files\Server</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
     <ClCompile Include="PacketManager.cpp">
-      <Filter>Source Files\Server</Filter>
+      <Filter>Source Files\Networking</Filter>
     </ClCompile>
     <ClCompile Include="PacketStructs.cpp">
-      <Filter>Source Files\Server</Filter>
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="general.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="general.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="server.h">
-      <Filter>Header Files\Server</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="PacketType.h">
-      <Filter>Header Files\Server</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="PacketManager.h">
-      <Filter>Header Files\Server</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="Packet.h">
-      <Filter>Header Files\Server</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="FileTransferData.h">
-      <Filter>Header Files\Server</Filter>
+      <Filter>Header Files\Networking</Filter>
     </ClInclude>
     <ClInclude Include="PacketStructs.h">
-      <Filter>Header Files\Server</Filter>
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="general.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

