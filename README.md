@@ -34,6 +34,9 @@ Commands
 |restart|`restart`|Restarts the Client|
 |kill|`kill`|Quits the Client|
 
+Detailed Description
+---
+At the core of this RAT lies it's unique ability to remotely execute commands via CMD, Powershell and almost all console-based applications. It has the capabilities to automatically install on startup and clean up behind itself. It also features an error-handler that logs any issues. As of now, it is not 100% stable. Under 'normal' conditions it runs smoothly and without any disturbances, but severe irregularities in input (i.e. messing around with it *a lot*) may cause crashes. This will be resolved in the near future.
 
 Requirements
 ---
@@ -47,10 +50,9 @@ Requirements
   * Windows Server 2012
   * Windows 8/8.1
   * Windows 10
-  
-Detailed Description
+
+[To-Do](https://github.com/werkamsus/lilith/blob/master/todo.md)
 ---
-At the core of this RAT lies it's unique ability to remotely execute commands via CMD, Powershell and almost all console-based applications. It has the capabilities to automatically install on startup and clean up behind itself. It also features an error-handler that logs any issues. As of now, it is not 100% stable. Under 'normal' conditions it runs smoothly and without any disturbances, but severe irregularities in input (i.e. messing around with it *a lot*) may cause crashes. This will be resolved in the near future.
 
 # More Info on Commands
 
