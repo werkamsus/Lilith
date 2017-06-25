@@ -34,7 +34,9 @@ Commands
 |restart|`restart`|Restarts the Client|
 |kill|`kill`|Quits the Client|
 
-Detailed Description
+  ![Demo Image](/images/demo.png)
+
+General Description
 ---
 At the core of this RAT lies it's unique ability to remotely execute commands via CMD, Powershell and almost all console-based applications. It has the capabilities to automatically install on startup and clean up behind itself. It also features an error-handler that logs any issues. As of now, it is not 100% stable. Under 'normal' conditions it runs smoothly and without any disturbances, but severe irregularities in input (i.e. messing around with it *a lot*) may cause crashes. This will be resolved in the near future.
 
