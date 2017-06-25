@@ -67,7 +67,7 @@ void Server::HandleInput()
 				userinput.empty();
 			}
 			else
-				General::outputMsg("Please connect to a session with 'connectSession'", 2);
+				General::outputMsg("Please connect to a session with 'connect'", 2);
 		}
 		else
 		{
@@ -77,7 +77,7 @@ void Server::HandleInput()
 				currentSessionID = -1;
 			}
 
-			if (General::processParameter(userinput, "switch"))
+			if (General::processParameter(userinput, "switchSession"))
 			{
 				inputInt = atoi(userinput.c_str());
 				int tempInt = connections.size() - 1;
@@ -130,9 +130,9 @@ bool Server::ProcessPacket(int ID, PacketType _packettype)
 		if (!GetString(ID, message)) //Get the chat message and store it in variable: Message
 			return false; //If we do not properly get the chat message, return false
 						  //Next we need to send the message out to each user
-		
+
 		General::outputMsg(message, 3);
-		
+
 		break;
 	}
 
@@ -310,7 +310,7 @@ void Server::DisconnectClient(int ID) //Disconnects a client and cleans up socke
 		connections.pop_back(); //Erase last connection from vector
 								//After cleaning up that connection, check if there are any more connections that can be erased (only connections at the end of the vector can be erased)
 
-		for (size_t i = connections.size() - 1; i >= 0 && connections.size()>0; i--)
+		for (size_t i = connections.size() - 1; i >= 0 && connections.size() > 0; i--)
 		{
 			if (connections[i]->ActiveConnection) //If connection is active we cannot remove any more connections from vector
 				break;
