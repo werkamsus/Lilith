@@ -24,3 +24,15 @@ void General::outputMsg(std::string message, int msgType)
 		break;
 	}
 }
+
+bool General::processParameter(std::string &command, std::string compCommand)
+{
+	std::string::size_type i = command.find(compCommand);
+	if (i != std::string::npos)
+	{
+		command.erase(i, compCommand.length() + 1);
+		return true;
+	}
+	else
+		return false;
+}

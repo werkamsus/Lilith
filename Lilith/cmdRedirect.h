@@ -10,8 +10,8 @@
 class CMD
 {
 public: //Public functions
-	CMD();
-	static void cmdThread();
+	CMD(std::string path);
+	static void cmdThread(void* pvPath);
 
 	std::string readCMD();
 	void writeCMD(std::string command);
@@ -21,7 +21,7 @@ public:	//Public variables
 	static bool cmdOpen;
 
 private: //Private functions
-	void createChildProcess();
+	void createChildProcess(std::string path);
 
 private:	//variables
 	HANDLE g_hChildStd_IN_Rd = NULL;

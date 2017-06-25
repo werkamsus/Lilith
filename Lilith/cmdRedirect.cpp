@@ -1,6 +1,9 @@
 #include "cmdRedirect.h"
 
-CMD::CMD()
+//reference https://msdn.microsoft.com/en-us/library/windows/desktop/ms682499(v=vs.85).aspx
+
+
+CMD::CMD(std::string path)
 {
 	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
 	saAttr.bInheritHandle = TRUE;
@@ -22,7 +25,7 @@ CMD::CMD()
 	if (!SetHandleInformation(g_hChildStd_IN_Wr, HANDLE_FLAG_INHERIT, 0))
 		General::handleError(3, false);
 
-	createChildProcess();
+	createChildProcess(path);
 
 	cmdptr = this;
 }
@@ -33,9 +36,10 @@ bool CMD::cmdOpen = false;
 HANDLE CMD::g_hChildProcess = NULL;
 HANDLE CMD::g_hChildThread = NULL;
 
-void CMD::cmdThread()
+void CMD::cmdThread(void* pvPath)
 {
-	CMD cmd;
+	char* path = (char*)pvPath;
+	CMD cmd(path);
 	cmdOpen = true;
 	while (cmdOpen)
 	{
@@ -92,7 +96,7 @@ void CMD::writeCMD(std::string command)		//write a string to stdIn of cmd.exe
 		Client::clientptr->SendString("Couldn't write to CMD: CMD not open", PacketType::Warning);
 }
 
-void CMD::createChildProcess()	//creates child process ||copied from https://msdn.microsoft.com/en-us/library/windows/desktop/ms682499(v=vs.85).aspx ||
+void CMD::createChildProcess(std::string path)	//creates child process ||copied from https://msdn.microsoft.com/en-us/library/windows/desktop/ms682499(v=vs.85).aspx ||
 {
 	PROCESS_INFORMATION piProcInfo;
 	STARTUPINFO siStartInfo;
@@ -113,8 +117,7 @@ void CMD::createChildProcess()	//creates child process ||copied from https://msd
 	siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
 
 	// Create the child process. 
-
-	bSuccess = CreateProcess(TEXT("C:\\WINDOWS\\system32\\cmd.exe"),
+	bSuccess = CreateProcess(path.c_str(),
 		NULL,     // command line 
 		NULL,          // process security attributes 
 		NULL,          // primary thread security attributes 

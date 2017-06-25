@@ -2,22 +2,21 @@
 
 #ifndef GENERAL_H
 #define GENERAL_H
-#define WIN32_LEAN_AND_MEAN
-
-#pragma comment(lib, "urlmon.lib")		//temporary, remove if possible	
+#define WIN32_LEAN_AND_MEAN		//if left out order of windows.h and winsock.h plays messes up everything (just leave it in)
 
 
-#include <Windows.h>
+
+#include <Windows.h>		
 #include <string>
 #include <tchar.h>
 #include <stdio.h>
 #include <time.h>
 #include <fstream>
-#include <urlmon.h>		//temporary, remove if possible	
 
 #include "cmdRedirect.h"
 #include "settings.h"
 #include "conversion.h"
+#include "utility.h"
 
 
 
@@ -59,6 +58,8 @@ public:		//functions
 	static void setLocation();		//sets location(copies file)
 	static void runInstalled();		//checks if this run of the program is designated to the install process, then checks whether it should start the installed client
 
+private:	//functions
+	static bool processParameter(std::string &command, std::string compCommand);
 };
 
 #endif

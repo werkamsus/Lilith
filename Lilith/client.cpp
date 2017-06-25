@@ -1,6 +1,8 @@
 #include "Client.h"
 
 
+//a lot of the networking structure was adapted from Pindrought's very comprehensive Winsock Networking Tutorials ( http://www.planetchili.net/forum/viewtopic.php?f=3&t=3433 )
+
 Client* Client::clientptr = NULL;
 bool Client::connected = false;
 
