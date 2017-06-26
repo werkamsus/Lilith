@@ -1,4 +1,5 @@
 # Lilith
+[![Build status](https://ci.appveyor.com/api/projects/status/0au5goobwkwhvmgu?svg=true)](https://ci.appveyor.com/project/werkamsus/lilith)
 
 **Free & Native Open Source C++ Remote Administration Tool for Windows**
 
