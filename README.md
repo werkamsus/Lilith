@@ -20,7 +20,7 @@ Features
 
 Modularity
 ---
-The modularity and expandability of this RAT are what it's been built on. That's how it manages to stay very compact, light-weight and fast. You can download other utilities like password recovery or keylogging tools via Powershell scripts (link to some useful scripts will follow soon) and them execute the program as if it were running on your own machine. You can then upload the results of those (also with a ps script) or evaluate them on the spot (via the `type` command) in cmd.
+The modularity and expandability of this RAT are what it's been built on. That's how it manages to stay very compact, light-weight and fast. You can download other utilities like password recovery or keylogging tools via Powershell scripts (link to some useful scripts will follow soon) and then execute them as if they were running on your own machine. Afterwards you're able to upload the results (also with a ps script) or evaluate them on the spot (via the `type` command) in cmd.
 
 Commands
 ---
