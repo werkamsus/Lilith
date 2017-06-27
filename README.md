@@ -5,6 +5,8 @@
 
 Lilith is a console-based ultra light-weight RAT developed in C++. It features a straight-forward set of [commands](#commands) that allows for near complete control of a machine.
 
+#Video(s) with a detailed feature-overview, a "user manual" and a lot of other information regarding the RAT coming *(very)* soon!
+
 Features
 ---
 * Remote Command Execution via
