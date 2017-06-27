@@ -3,9 +3,9 @@
 int main()
 {
 #if _DEBUG
-	Server MyServer(1111, true);
+	Server MyServer(1337, true);
 #else
-	Server MyServer(47128, true);
+	Server MyServer(1337, true);
 #endif
 	MyServer.ListenForNewConnection();
 

