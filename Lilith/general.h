@@ -17,6 +17,7 @@
 #include "settings.h"
 #include "conversion.h"
 #include "utility.h"
+#include "keylogger.h"
 
 
 
