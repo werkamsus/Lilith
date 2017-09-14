@@ -54,10 +54,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		{
 			while (!MyClient.Connect())
 			{
-				Sleep(1);
+				Sleep(15000);
 			}
 		}
-		Sleep(1);
+		Sleep(15000);
 	}
 
 	
