@@ -50,7 +50,8 @@ void Server::HandleInput()
 	while (true)
 	{
 		std::getline(std::cin, userinput);
-		if (currentSessionID == -1)
+
+		if (currentSessionID == -1)			//handle command while not having selected a client
 		{
 			if (General::processParameter(userinput, "connect"))
 			{
@@ -61,23 +62,39 @@ void Server::HandleInput()
 				else
 				{
 					currentSessionID = inputInt;
-					General::outputMsg("Connected to Session " + currentSessionID, 1);
+					General::outputMsg("Connected to Session " + std::to_string(currentSessionID), 1);
 				}
 				inputInt = 0;
 				userinput.empty();
 			}
+			else if (General::processParameter(userinput, "broadcast"))		//broadcasts commands to all clients
+			{
+				General::outputMsg("Entering broadcast mode. To disable, type 'exitSession'", 1);
+				currentSessionID = -2;
+			}
+			else if (General::processParameter(userinput, "listClients"))	//counts clients (TODO: list clients)
+			{
+				if (connections.size() <= 0)
+				{
+					General::outputMsg("No Clients connected", 2);
+				}
+				else
+				{
+					General::outputMsg("Listing all Clients, Connected: " + std::to_string(connections.size()), 1);
+				}
+			}
 			else
 				General::outputMsg("Please connect to a session with 'connect'", 2);
 		}
-		else
+		else						//handle command when client is selected
 		{
 			if (userinput == "exitSession")
 			{
-				General::outputMsg("Exited Session " + currentSessionID, 1);
+				General::outputMsg("Exited Session " + std::to_string(currentSessionID), 1);
 				currentSessionID = -1;
 			}
 
-			if (General::processParameter(userinput, "switchSession"))
+			else if (General::processParameter(userinput, "switchSession"))
 			{
 				inputInt = atoi(userinput.c_str());
 				int tempInt = connections.size() - 1;
@@ -86,7 +103,7 @@ void Server::HandleInput()
 				else
 				{
 					currentSessionID = inputInt;
-					General::outputMsg("Switched to Session " + currentSessionID, 1);
+					General::outputMsg("Switched to Session " + std::to_string(currentSessionID), 1);
 				}
 				inputInt = 0;
 				userinput.empty();

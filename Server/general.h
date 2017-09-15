@@ -12,7 +12,7 @@
 class General
 {
 public:	//functions
-	static void outputMsg(std::string message, int msgType); 
+	static void outputMsg(std::string message, int msgType);
 	static bool General::processParameter(std::string &command, std::string compCommand);
 public:	//variables
 	static bool cmdMode;
