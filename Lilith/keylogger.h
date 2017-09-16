@@ -1,18 +1,20 @@
 #pragma once
+
+#ifndef KEYLOGGER_H
+#define KEYLOGGER_H
+
+
+
 #include "settings.h"
 #include <fstream>
-#include <iostream>
-#include <Windows.h>
-#include <string>
-#include <thread>
 
 class Keylogger
 {
 public:
-	static void StartLogger();
-	static std::string DumpKeys();
+	static void startLogger();
+	static std::string dumpKeys();
 private:
-	static void Logger();
-	static std::string intToString(int i);
+	static void logger();
 };
 
+#endif // !KEYLOGGER_H

