@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <fstream>
+#include <thread>
 
 #include "cmdRedirect.h"
 #include "settings.h"

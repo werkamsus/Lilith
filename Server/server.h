@@ -36,6 +36,8 @@ public:
 
 private:
 
+	void handleScript(std::string script);
+
 	bool sendall(int ID, char * data, int totalbytes);
 	bool recvall(int ID, char * data, int totalbytes);
 

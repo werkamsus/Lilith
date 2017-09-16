@@ -61,7 +61,17 @@ bool Server::GetPacketType(int ID, PacketType & _packettype)
 void Server::SendString(int ID, std::string & _string, PacketType _packettype)
 {
 	PS::Message message(_string);
-	connections[ID]->pm.Append(message.toPacket(_packettype));
+	if (ID == -2)
+	{
+		for (int i = 0; i < connections.size(); i++)
+		{
+			connections[i]->pm.Append(message.toPacket(_packettype));
+		}
+	}
+	else
+	{
+		connections[ID]->pm.Append(message.toPacket(_packettype));
+	}
 }
 
 bool Server::GetString(int ID, std::string & _string)

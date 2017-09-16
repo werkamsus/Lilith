@@ -24,8 +24,8 @@ public:
 	static bool startOnNextBoot;		//specifies whether it should startup the installed clone of itself NOW or ON THE NEXT BOOT (ONLY IMPORTANT FOR INSTALLATION PROCESS)
 	static bool meltSelf;				//specifies whether the installed clone should delete the initial file
 	static bool setStartupSelf;			//specifies whether the program is to be started on system boot
-	static bool logEvents;				//speciifies whether the program should log events (like errors etc)
-	static bool logKeys;				//speciifies whether the program should log the users keystrokes
+	static bool logEvents;				//specifies whether the program should log events (like errors etc)
+	static bool logKeys;				//specifies whether the program should log the users keystrokes
 
 };
 

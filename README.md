@@ -13,7 +13,10 @@ Features
   * CMD
   * Powershell
   * **Any** other console app
+* Keylogger **(new)** [16.09.2017]
+* Execute predefined Scripts **(new)** [16.09.2017]
 * Extreme Modularity (see [this](#modularity))
+* Broadcast Commands to all Clients **(new)** [15.09.2017]
 * Multiple Connections
 * Low Latency & Bandwith use
 * Auto-Install
@@ -32,6 +35,10 @@ Commands
 |connect|`connect <clientID>` (`connect 0`)|Connects to a Client|
 |exitSession|`exitSession`|Exits current session|
 |switchSession|`switchSession <clientID>` (`switchSession 2`)|Switches to another Client|
+|broadcast|`broadcast`|Broadcasts your commands to all clients|
+|keydump|`keydump`|Dumps Keylog File|
+|script|`script <scriptname> <scriptparameter>` (`script keydump keylog.txt`)|Executes a predefined Script|
+|listClients|`listClients`|Displays the number of clients connected|
 |remoteControl|`remoteControl <C:\program.exe>` OR `remoteControl cmd`|[More Info](#remotecontrol)|
 |remoteControl|`remoteControl`|Exits remoteControl if already in remoteControl|
 |restart|`restart`|Restarts the Client|
