@@ -1,4 +1,9 @@
 #pragma once
+
+#ifndef FILETRANSFERDATA_H
+#define FILETRANSFERDATA_H
+
+
 #include <fstream> //for std::ifstream and std::ofstream
 struct FileTransferData
 {
@@ -12,3 +17,6 @@ struct FileTransferData
 	std::ofstream outfileStream; //For writing a file that is being received
 	char buffer[buffersize]; //buffer used for when sending or receiving to optimize constantly reallocating buffers
 };
+
+
+#endif // !FILETRANSFERDATA_H

@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef PACKETMANAGER_H
+#define PACKETMANAGER_H
+
 #include "Packet.h"
 #include <queue>
 #include <mutex>
@@ -14,3 +18,5 @@ public:
 	void Append(Packet p);
 	Packet Retrieve();
 };
+
+#endif

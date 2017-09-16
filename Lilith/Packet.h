@@ -1,4 +1,9 @@
 #pragma once
+
+#ifndef PACKET_H
+#define PACKET_H
+
+
 class Packet
 {
 public:
@@ -8,3 +13,6 @@ public:
 	int size;
 	char * buffer;
 };
+
+
+#endif // !PACKET_H

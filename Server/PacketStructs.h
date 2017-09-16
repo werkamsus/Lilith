@@ -1,4 +1,7 @@
 #pragma once
+#ifndef PACKETSTRUCTS_H
+#define PACKETSTRUCTS_H
+
 #include "PacketType.h"
 #include "Packet.h"
 #include <string>
@@ -15,3 +18,5 @@ namespace PS //Packet Structures Namespace
 	};
 
 }
+
+#endif
