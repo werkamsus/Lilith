@@ -5,16 +5,18 @@
 
 Lilith is a console-based ultra light-weight RAT developed in C++. It features a straight-forward set of [commands](#commands) that allows for near complete control of a machine.
 
-# [(Video) Click here for a detailed feature-overview, a "user manual" and a lot of other information regarding the RAT!](https://youtu.be/86rPt8oAQK4)
+# [[UPDATE] Youtube Video about the new Features](https://youtu.be/etk2dcx4mi8)
 
 Features
 ---
-* Broadcast Commands to all Clients **(new)** [15.09.2017]
 * Remote Command Execution via
   * CMD
   * Powershell
   * **Any** other console app
+* Keylogger **(new)** [16.09.2017]
+* Execute predefined Scripts **(new)** [16.09.2017]
 * Extreme Modularity (see [this](#modularity))
+* Broadcast Commands to all Clients **(new)** [15.09.2017]
 * Multiple Connections
 * Low Latency & Bandwith use
 * Auto-Install
@@ -34,6 +36,8 @@ Commands
 |exitSession|`exitSession`|Exits current session|
 |switchSession|`switchSession <clientID>` (`switchSession 2`)|Switches to another Client|
 |broadcast|`broadcast`|Broadcasts your commands to all clients|
+|keydump|`keydump`|Dumps Keylog File|
+|script|`script <scriptname> <scriptparameter>` (`script keydump keylog.txt`)|Executes a predefined Script|
 |listClients|`listClients`|Displays the number of clients connected|
 |remoteControl|`remoteControl <C:\program.exe>` OR `remoteControl cmd`|[More Info](#remotecontrol)|
 |remoteControl|`remoteControl`|Exits remoteControl if already in remoteControl|
