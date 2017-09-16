@@ -120,6 +120,7 @@
     <ClCompile Include="conversion.cpp" />
     <ClCompile Include="encryption.cpp" />
     <ClCompile Include="general.cpp" />
+    <ClCompile Include="keylogger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="PacketManager.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="encryption.h" />
     <ClInclude Include="FileTransferData.h" />
     <ClInclude Include="general.h" />
+    <ClInclude Include="keylogger.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketManager.h" />
     <ClInclude Include="PacketType.h" />
