@@ -25,6 +25,7 @@ void General::outputMsg(std::string message, int msgType)
 	}
 }
 
+
 bool General::processParameter(std::string &command, std::string compCommand)
 {
 	std::string::size_type i = command.find(compCommand);

