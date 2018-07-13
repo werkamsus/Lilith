@@ -91,6 +91,36 @@ void Client::ClientThread()
 	}
 }
 
+bool Client::resolveIP(std::string &hostname)
+{
+	int sockfd;
+	struct addrinfo hints, *servinfo, *p;
+	struct sockaddr_in *h;
+	int rv;
+	char ip[INET6_ADDRSTRLEN];
+
+	memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_UNSPEC; // use AF_INET6 to force IPv6
+	hints.ai_socktype = SOCK_STREAM;
+
+	if ((rv = getaddrinfo(hostname.c_str(), "http", &hints, &servinfo)) != 0)
+	{
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+		return false;
+	}
+
+	// loop through all the results and connect to the first we can
+	for (p = servinfo; p != NULL; p = p->ai_next)
+	{
+		h = (struct sockaddr_in *) p->ai_addr;
+		strcpy_s(ip, INET6_ADDRSTRLEN, inet_ntoa(h->sin_addr));
+	}
+
+	freeaddrinfo(servinfo); // all done with this structure
+	hostname = ip;
+	return true;
+}
+
 bool Client::RequestFile(std::string FileName)
 {
 	file.outfileStream.open(FileName, std::ios::binary); //open file to write file to
@@ -116,7 +146,7 @@ Client::Client(std::string IP, int PORT)
 	{
 		exit(0);
 	}
-
+	resolveIP(IP);
 	addr.sin_addr.s_addr = inet_addr(IP.c_str()); //Address (127.0.0.1) = localhost (this pc)
 	addr.sin_port = htons(PORT); //Port 
 	addr.sin_family = AF_INET; //IPv4 Socket

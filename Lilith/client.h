@@ -6,6 +6,7 @@
 #pragma comment(lib,"ws2_32.lib") //Required for WinSock#include "client.h"
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WinSock2.h>
+#include <WS2tcpip.h>
 
 #include "FileTransferData.h"
 #include "PacketType.h"
@@ -33,6 +34,10 @@ public: //Public functions
 private: //Private functions
 	bool ProcessPacketType(PacketType _PacketType);
 	static void ClientThread();
+
+	//Utility
+	bool resolveIP(std::string &hostname);	//for DNS
+
 	//Sending Funcs
 	bool sendall(char * data, int totalbytes);
 	bool Sendint32_t(int32_t _int32_t);
@@ -51,7 +56,7 @@ private:
 	SOCKADDR_IN addr; //Address to be binded to our Connection socket
 };
 
-	//This client ptr is necessary so that the ClientThread method can access the Client instance/methods. 
-							//Since the ClientThread method is static, this is the simplest workaround I could think of since there will only be one instance of the client.
+//This client ptr is necessary so that the ClientThread method can access the Client instance/methods. 
+						//Since the ClientThread method is static, this is the simplest workaround I could think of since there will only be one instance of the client.
 
 #endif // !CLIENT_H
