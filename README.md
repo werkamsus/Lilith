@@ -18,10 +18,11 @@ Features
 * Extreme Modularity (see [this](#modularity))
 * Broadcast Commands to all Clients **(new)** [15.09.2017]
 * Multiple Connections
-* Low Latency & Bandwith use
 * Auto-Install
 * Startup Persistence
 * Self-Erases
+* DNS Resolving
+* Low Latency & Bandwith use
 * Error-Handler with logs
 
 Modularity
