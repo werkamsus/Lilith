@@ -1,4 +1,5 @@
 #include "Server.h"
+#include <process.h>
 
 Server* Server::serverptr; //Serverptr is necessary so the static ClientHandler method can access the server instance/functions.
 
@@ -34,12 +35,12 @@ Server::Server(int PORT, bool BroadcastPublically) //Port = port to broadcast on
 		exit(1);
 	}
 	serverptr = this;
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)PacketSenderThread, NULL, NULL, NULL); //Create thread that will manage all outgoing packets
+    _beginthreadex(NULL, NULL, (_beginthreadex_proc_type)PacketSenderThread, NULL, NULL, NULL); //Create thread that will manage all outgoing packets
 }
 
 void Server::ListenForNewConnection()
 {
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ListenerThread, NULL, NULL, NULL); //Create thread that will manage all outgoing packets
+    _beginthreadex(NULL, NULL, (_beginthreadex_proc_type)ListenerThread, NULL, NULL, NULL); //Create thread that will manage all outgoing packets
 }
 
 void Server::HandleInput()
@@ -331,7 +332,7 @@ void Server::ListenerThread()
 				serverptr->connections.push_back(newConnection); //push new connection into vector of connections
 			}
 			std::cout << "Client Connected! ID:" << NewConnectionID << " | IP: " << inet_ntoa(serverptr->addr.sin_addr) << std::endl;
-			CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientHandlerThread, (LPVOID)(NewConnectionID), NULL, NULL); //Create Thread to handle this client. The index in the socket array for this thread is the value (i).
+            _beginthreadex(NULL, NULL, (_beginthreadex_proc_type)ClientHandlerThread, (LPVOID)(NewConnectionID), NULL, NULL); //Create Thread to handle this client. The index in the socket array for this thread is the value (i).
 		}
 	}
 }
