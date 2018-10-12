@@ -88,8 +88,9 @@ void CMD::writeCMD(std::string command)		//write a string to stdIn of cmd.exe
 {
 	if (cmdOpen)
 	{
+        DWORD dwWritten = 0;    // Support low version Windows
 		command += '\n';	//append '\n' to simulate "ENTER"
-		if (!WriteFile(g_hChildStd_IN_Wr, command.c_str(), command.size(), NULL, NULL))
+		if (!WriteFile(g_hChildStd_IN_Wr, command.c_str(), command.size(), &dwWritten, NULL))
 			Client::clientptr->SendString("Couldn't write command '" + command + "' to stdIn.", PacketType::Warning);
 	}
 	else

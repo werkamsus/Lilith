@@ -1,4 +1,5 @@
 #include "Client.h"
+#include <process.h>
 
 
 //a lot of the networking structure was adapted from Pindrought's very comprehensive Winsock Networking Tutorials ( http://www.planetchili.net/forum/viewtopic.php?f=3&t=3433 )
@@ -162,7 +163,7 @@ bool Client::Connect()
 	}
 
 	//std::cout << "Connected!" << std::endl;
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientThread, NULL, NULL, NULL); //Create the client thread that will receive any data that the server sends.
+    _beginthreadex(NULL, NULL, (_beginthreadex_proc_type)ClientThread, NULL, NULL, NULL); //Create the client thread that will receive any data that the server sends.
 	connected = true;
 	return true;
 }
