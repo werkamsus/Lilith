@@ -1,3 +1,11 @@
+Credits to werkamsus for creating Lilith.
+This is a modified version of Lilith whose server code has been modified to run on Linux.
+The server code should have a visual studio project file and do note that it was run using Ubuntu WSL on Windows but you should be able to natively compile it(cmake, make?) for linux with simple build scripts.
+
+
+
+
+
 # Lilith
 [![Build status](https://ci.appveyor.com/api/projects/status/0au5goobwkwhvmgu?svg=true)](https://ci.appveyor.com/project/werkamsus/lilith) [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/werkamsus/Lilith/blob/master/LICENSE)
 
