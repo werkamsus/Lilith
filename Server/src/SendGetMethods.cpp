@@ -1,4 +1,4 @@
-#include "Server.h"
+#include "server.h"
 
 bool Server::recvall(int ID, char * data, int totalbytes)
 {
@@ -6,7 +6,7 @@ bool Server::recvall(int ID, char * data, int totalbytes)
 	while (bytesreceived < totalbytes) //While we still have more bytes to recv
 	{
 		int RetnCheck = recv(connections[ID]->socket, data, totalbytes - bytesreceived, NULL); //Try to recv remaining bytes
-		if (RetnCheck == SOCKET_ERROR) //If there is a socket error while trying to recv bytes
+		if (RetnCheck == -1) //If there is a socket error while trying to recv bytes
 			return false; //Return false - failed to recvall
 		bytesreceived += RetnCheck; //Add to total bytes received
 	}
@@ -19,7 +19,7 @@ bool Server::sendall(int ID, char * data, int totalbytes)
 	while (bytessent < totalbytes) //While we still have more bytes to send
 	{
 		int RetnCheck = send(connections[ID]->socket, data + bytessent, totalbytes - bytessent, NULL); //Try to send remaining bytes
-		if (RetnCheck == SOCKET_ERROR) //If there is a socket error while trying to send bytes
+		if (RetnCheck == -1) //If there is a socket error while trying to send bytes
 			return false; //Return false - failed to sendall
 		bytessent += RetnCheck; //Add to total bytes sent
 	}
@@ -58,7 +58,7 @@ bool Server::GetPacketType(int ID, PacketType & _packettype)
 	return true;//Return true if we were successful in retrieving the packet type
 }
 
-void Server::SendString(int ID, std::string & _string, PacketType _packettype)
+void Server::SendString(int ID, std::string const & _string, PacketType _packettype)
 {
 	PS::Message message(_string);
 	if (ID == -2)

@@ -1,5 +1,5 @@
 #include "PacketStructs.h"
-#include <Windows.h>
+#include "general.h"
 
 namespace PS
 {
