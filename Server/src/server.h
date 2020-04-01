@@ -1,7 +1,4 @@
 #pragma once
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#pragma comment(lib,"ws2_32.lib") //Required for WinSock
-#include <WinSock2.h> //For win sockets
 #include <string> //For std::string
 #include <iostream> //For std::cout, std::endl
 #include <vector> //for std::vector
@@ -14,13 +11,13 @@
 class Connection
 {
 public:
-	Connection(SOCKET socket_)
+	Connection(int socket_)
 	{
 		socket = socket_;
 		ActiveConnection = true; //Default to active connection 
 	}
 	bool ActiveConnection; //True if connection is active, false if inactive(due to a disconnect)
-	SOCKET socket;
+	int socket;
 	//file transfer data
 	FileTransferData file; //Object that contains information about our file that is being sent to the client from this server
 	PacketManager pm; //Packet Manager for outgoing data for this connection
@@ -47,14 +44,14 @@ private:
 	bool SendPacketType(int ID, PacketType _packettype);
 	bool GetPacketType(int ID, PacketType & _packettype);
 
-	void SendString(int ID, std::string & _string, PacketType _packettype);
+	void SendString(int ID, std::string const & _string, PacketType _packettype);
 	bool GetString(int ID, std::string & _string);
 
 	bool ProcessPacket(int ID, PacketType _packettype);
 	bool HandleSendFile(int ID);
 
 	static void ClientHandlerThread(int ID);
-	static void PacketSenderThread();
+	static void PacketSenderThread(void);
 	static void ListenerThread();
 
 	void DisconnectClient(int ID); //Called to properly disconnect and clean up a client (if possible)
@@ -63,9 +60,9 @@ private:
 	std::mutex connectionMgr_mutex; //mutex for managing connections (used when a client disconnects)
 	int UnusedConnections = 0; //# of Inactive Connection Objects that can be reused
 
-	SOCKADDR_IN addr; //Address that we will bind our listening socket to
-	int addrlen = sizeof(addr);
-	SOCKET sListen;
+	sockaddr_in addr; //Address that we will bind our listening socket to
+	socklen_t addrlen = sizeof(addr);
+	int sListen;
 	int currentSessionID;
 };
 
